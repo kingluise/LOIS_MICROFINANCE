@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lois Microfinance - Login</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="branding">
+                <img src="images/LOIS.png" alt="Lois Microfinance Logo">
+                <h2>LOIS MICROFINANCE</h2>
+                <p>Welcome to the Lois Microfinance Bank Loan Application System. Manage customer loans, repayments, and track financial records with ease.</p>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="login-box">
+                <h2>Log into Your Account</h2>
+                <form id="login-form">
+                    <div class="input-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="Enter your password" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="role">Role</label>
+                        <select id="role" required>
+                            <option value="">Select Role</option>
+                            <option value="admin">Admin</option>
+                            <option value="operator">Operator</option>
+                        </select>
+                    </div>
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="js/login.js"></script>
+</body>
+
+</html>

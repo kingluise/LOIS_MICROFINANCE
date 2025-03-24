@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Management Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <script src="js/dashboard.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-title">
+            <img src="images/LOIS.png" alt="Logo" class="logo">
+            <h2>Lois Microfinance Bank</h2>
+        </div>
+        <ul class="menu">
+            <li><a href="admin_dashboard.html">🏠 Home</a></li>
+            <li><a href="admin_customer.html">👥 Manage Customers</a></li>
+            <li><a href="admin_loan.html">💰 Manage Loans</a></li>
+            <li><a href="admin_payments.html">💳 Payments</a></li>
+            <li><a href="admin_authorization.html">💳 Authorizations</a></li>
+            <li id="superAdminMenu" class="hidden"><a href="super-admin.html">🔧 Super Admin</a></li>
+            <li><a href="index.html" id="logout">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <div class="welcome-message">
+                <h2>Welcome, <span id="userRoleDisplay"></span></h2>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button>🔍</button>
+            </div>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="dashboard-cards">
+            <div class="card">
+                <h3>Total Loans</h3>
+                <p id="total-loans">₦0</p>
+            </div>
+            <div class="card">
+                <h3>Pending Approvals</h3>
+                <p id="pending-loans">0</p>
+            </div>
+            <div class="card">
+                <h3>Active Loans</h3>
+                <p id="active-loans">0</p>
+            </div>
+            <div class="card">
+                <h3>Overdue Loans</h3>
+                <p id="overdue-loans">0</p>
+            </div>
+            <div class="card">
+                <h3>Total Customers</h3>
+                <p id="total-customers">0</p>
+            </div>
+            <div class="card">
+                <h3>Due Payments (Today)</h3>
+                <p id="due-payments">₦0</p>
+            </div>
+            <div class="card">
+                <h3>Total Principal</h3>
+                <p id="total-principal">₦0</p>
+            </div>
+            <div class="card">
+                <h3>Total Interest</h3>
+                <p id="total-interest">₦0</p>
+            </div>
+        </div>
+
+        <!-- Loan Analytics Section -->
+  <div class="analytics">
+      <h2>📊 Loan Analytics</h2>
+      <canvas id="loanChart"></canvas> <!-- Chart.js Canvas -->
+  </div>
+
+        <!-- Transactions Section -->
+        <div class="transactions">
+      <h2>📋 Recent Transactions</h2>
+      <table>
+          <tr>
+              <th>Customer</th>
+              <th>Amount</th>
+              <th>Status</th>
+          </tr>
+          <!-- Transactions will be dynamically inserted here by JavaScript -->
+      </table>
+  </div>
+
+        <!-- Announcements Section -->
+        <div class="announcements">
+            <h2>📢 Announcements</h2>
+            <ul>
+                <li>🚀 New loan plans available from next month!</li>
+                <li>💳 Payment due reminders will be sent every Friday.</li>
+                <li>📈 Loan interest rates updated.</li>
+            </ul>
+        </div>
+
+    </div>
+
+</body>
+</html>
