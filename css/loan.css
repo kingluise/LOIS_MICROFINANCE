@@ -1,0 +1,431 @@
+/* ====== Sidebar Styling (Matches Dashboard) ====== */
+/* Sidebar Navigation */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 15px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 80px;
+    margin-bottom: 10px;
+}
+
+.sidebar h2 {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: #27ae60;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu li {
+    margin: 15px 0;
+}
+
+.menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.menu a:hover {
+    background: #27ae60;
+}
+
+/* ====== Page Body Background (Matches Dashboard) ====== */
+body {
+    background: linear-gradient(to right, #2c3e50, #27ae60);
+    font-family: Arial, sans-serif;
+}
+
+/* ====== Main Content Styling ====== */
+.loan-management-container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    margin-left: 270px;
+    /* Adjusted to accommodate sidebar */
+}
+
+/* ====== General Button Styling ====== */
+button {
+    /* Reset default button styles */
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: none;
+    /* Add your custom styles below */
+}
+
+/* ====== Loan Actions Styling ====== */
+.loan-actions {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.loan-actions button {
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.15);
+}
+
+/* Primary Button Style (e.g., New Loan Application) */
+#new-loan-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+#new-loan-btn:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Secondary Button Style (e.g., Due/Overdue, Pending) */
+.loan-actions button:not(#new-loan-btn) {
+    background-color: #f8f9fa;
+    color: #343a40;
+    border: 1px solid #ced4da;
+}
+
+.loan-actions button:not(#new-loan-btn):hover {
+    background-color: #e2e6ea;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+}
+
+/* ====== Loan Tables Styling ====== */
+.loan-tables {
+    margin-bottom: 20px;
+}
+
+.loan-table {
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.loan-table h2 {
+    font-size: 1.3em;
+    margin-bottom: 15px;
+}
+
+.loan-table input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.loan-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.loan-table th,
+.loan-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+.loan-table th {
+    background: #14213D;
+    color: white;
+    font-weight: bold;
+}
+
+.loan-table tbody tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.loan-table tbody tr:hover {
+    background: rgba(20, 33, 61, 0.1);
+}
+
+/* ====== Table Switch Styling ====== */
+.table-switch {
+    text-align: center;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.table-switch button {
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 15px;
+    transition: background-color 0.3s,
+    transform 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    background: #14213D;
+    color: white;
+    border: none;
+}
+
+.table-switch button:hover {
+    background: #FCA311;
+    color: #14213D;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* ====== New Loan Modal Styling ====== */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    /* Adjusted margin */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    /* Adjusted width */
+    max-width: 600px;
+    /* Added max-width */
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+/* ====== Loan Form Styling ====== */
+.loan-form {
+    display: block;
+}
+
+.loan-form h3 {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+}
+
+.loan-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #333;
+    margin-top: 12px;
+}
+
+.loan-form input,
+.loan-form select {
+    width: 100%;
+    padding: 11px;
+    margin-top: 6px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+.loan-form input:focus,
+.loan-form select:focus {
+    border-color: #FCA311;
+    outline: none;
+}
+
+.loan-form input[type="date"] {
+    /* Adjust date input styling if needed */
+     padding: 8px; /* Add some padding for better spacing */
+  border: 1px solid #ccc; /* Add a border for visual clarity */
+  border-radius: 4px; /* Add rounded corners */
+  font-size: 14px; /* Adjust font size */
+  font-family: sans-serif; /* Ensure consistent font */
+  width: 100%; /* Make the input take full width of its container */
+  box-sizing: border-box; /* Include padding and border in the element's total width */
+}
+
+
+.loan-form button[type="submit"] {
+    margin-top: 15px;
+    padding: 10px;
+    background: #14213D;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s,
+    transform 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.loan-form button[type="submit"]:hover {
+    background: #FCA311;
+    color: #14213D;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* ====== Due and Overdue Loans Styling ====== */
+#weekly-due-loans,
+#monthly-due-loans,
+#weekly-overdue-loans,
+#monthly-overdue-loans {
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    display: none;
+    /* Initially hide all due/overdue tables */
+}
+
+#weekly-due-loans h2,
+#monthly-due-loans h2,
+#weekly-overdue-loans h2,
+#monthly-overdue-loans h2 {
+    font-size: 1.3em;
+    margin-bottom: 15px;
+}
+
+#weekly-due-loans table,
+#monthly-due-loans table,
+#weekly-overdue-loans table,
+#monthly-overdue-loans table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#weekly-due-loans th,
+#weekly-due-loans td,
+#monthly-due-loans th,
+#monthly-due-loans td,
+#weekly-overdue-loans th,
+#weekly-overdue-loans td,
+#monthly-overdue-loans th,
+#monthly-overdue-loans td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+#weekly-due-loans th,
+#monthly-due-loans th,
+#weekly-overdue-loans th,
+#monthly-overdue-loans th {
+    background: #14213D;
+    color: white;
+    font-weight: bold;
+}
+
+#weekly-due-loans tbody tr:nth-child(even),
+#monthly-due-loans tbody tr:nth-child(even),
+#weekly-overdue-loans tbody tr:nth-child(even),
+#monthly-overdue-loans tbody tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+#weekly-due-loans tbody tr:hover,
+#monthly-due-loans tbody tr:hover,
+#weekly-overdue-loans tbody tr:hover,
+#monthly-overdue-loans tbody tr:hover {
+    background: rgba(20, 33, 61, 0.1);
+}
+
+/* ====== Pending Approvals Table Styling ====== */
+#pending-approvals {
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    display: none;
+}
+
+#pending-approvals h2 {
+    font-size: 1.3em;
+    margin-bottom: 15px;
+}
+
+#pending-approvals table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#pending-approvals th,
+#pending-approvals td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+#pending-approvals th {
+    background: #14213D;
+    color: white;
+    font-weight: bold;
+}
+
+#pending-approvals tbody tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+#pending-approvals tbody tr:hover {
+    background: rgba(20, 33, 61, 0.1);
+}
