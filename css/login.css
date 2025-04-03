@@ -1,0 +1,93 @@
+/* Global Styles */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif; /* Using Poppins as an example - see instructions below to change */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to right, #2c3e50, #27ae60);
+}
+
+/* Layout */
+.container {
+    display: flex;
+    width: 70%;
+    height: 500px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Left Panel */
+.left-panel {
+    width: 40%;
+    background: #1d2d3c;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.branding img {
+    width: 100px; /* Increased logo size */
+}
+
+.branding h2 {
+    margin: 10px 0;
+    font-weight: bold; /* Making the heading bold */
+}
+
+/* Right Panel */
+.right-panel {
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box {
+    width: 70%;
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-weight: bold; /* Making the subheading bold */
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold; /* Making the labels bold */
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em; /* Ensuring input text is readable */
+}
+
+button {
+    width: 100%;
+    padding: 12px; /* Slightly increased button padding */
+    border: none;
+    background: #27ae60;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold; /* Making the button text bold */
+    transition: background-color 0.3s ease; /* Adding a smooth hover transition */
+}
+
+button:hover {
+    background: #219150;
+}
