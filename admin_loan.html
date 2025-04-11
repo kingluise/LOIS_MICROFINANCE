@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Management</title>
+    <link rel="stylesheet" href="css/loan.css">
+    <script src="js/admin_loan.js" defer></script>
+</head>
+
+<body>
+
+    <div class="loan-management-container">
+        <div class="sidebar">
+            <div class="logo-title">
+                <img src="image/loism.png" alt="Logo" class="logo">
+                <h2>Lois Microfinance</h2>
+            </div>
+            <ul class="menu">
+                <li><a href="admin_dashboard.html">🏠 Home</a></li>
+                <li><a href="admin_customers.html">👥 Manage Customers</a></li>
+                <li class="active"><a href="admin_loan.html">💰 Manage Loans</a></li>
+                <li><a href="admin_payment.html">💳 Payments</a></li>
+                <li class="active"><a href="admin_notification.html">🔔 Notifications</a></li>
+                <li><a href="profit_analytics.html">📊 Profit Analytics</a></li>
+                <li><a href="index.html" id="logout">🚪 Logout</a></li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <h1>Loan Management</h1>
+
+            <div class="loan-actions">
+                <button id="new-loan-btn">New Loan Application</button>
+                <button id="pending-approvals-btn">Pending Approvals</button>
+                <select id="loan-type-filter">
+                    <option value="all">All Loans</option>
+                    <option value="weekly">Weekly Loans</option>
+                    <option value="monthly">Monthly Loans</option>
+                </select>
+                <input type="text" id="loan-search" placeholder="Search loans...">
+            </div>
+
+            <div class="loan-tables">
+                <div id="loans-table-container" class="loan-table">
+                    <h2>All Loans</h2>
+                    <table id="loans-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Full Name</th>
+                                <th>Loan Amount</th>
+                                <th>Interest</th>
+                                <th>Duration</th>
+                                <th>Repayment</th>
+                                <th>Balance</th>
+                                <th>Group</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="pending-loans-table-container" class="loan-table" style="display: none;">
+                    <h2>Pending Loan Approvals</h2>
+                    <table id="pending-loans-table">
+                        <thead>
+                            <tr>
+                                <th>Customer ID</th>
+                                <th>Full Name</th>
+                                <th>Loan Amount</th>
+                                <th>Interest Rate</th>
+                                <th>Loan Type</th>
+                                <th>Total Payment</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <button id="back-to-loans-btn">Back to All Loans</button>
+                </div>
+
+                <div id="new-loan-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h2>New Loan Application</h2>
+                        <select id="loan-type">
+                            <option value="">Select Loan Type</option>
+                            <option value="weekly">Weekly Loan</option>
+                            <option value="monthly">Monthly Loan</option>
+                        </select>
+
+                        <div id="weekly-loan-form" class="loan-form">
+                            <h3>Weekly Loan Application</h3>
+                            <form id="weekly-form">
+                                <label for="customer-id">Customer ID (Required):</label>
+                                <input type="text" id="customer-id" required>
+
+                                <label for="full-name">Full Name (Required):</label>
+                                <input type="text" id="full-name" required>
+
+                                <label for="amount">Amount (Required):</label>
+                                <input type="number" id="amount" required>
+
+                                <label for="group">Group (Required, Monday to Friday):</label>
+                                <select id="group" required>
+                                    <option value="">Select Day</option>
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                </select>
+
+                                <label for="interest-rate">Interest Rate (Required, %):</label>
+                                <input type="number" id="interest-rate" step="0.01" required>
+
+                                <label for="duration">Duration (Required, Weeks):</label>
+                                <input type="number" id="duration" value="23" readonly>
+
+                                <label for="repayment-date">Repayment Date (Optional):</label>
+                                <input type="date" id="repayment-date">
+
+                                <button type="submit">Submit Weekly Loan Application</button>
+                            </form>
+                        </div>
+
+                        <div id="monthly-loan-form" class="loan-form" style="display: none;">
+                            <h3>Monthly Loan Application</h3>
+                            <form id="monthly-form">
+                                <label for="customer-id-monthly">Customer ID (Required):</label>
+                                <input type="text" id="customer-id-monthly" required>
+
+                                <label for="full-name-monthly">Full Name:</label>
+                                <input type="text" id="full-name-monthly" readonly>
+
+                                <label for="amount-monthly">Amount (Required):</label>
+                                <input type="number" id="amount-monthly" required>
+
+                                <label for="interest-rate-monthly">Interest Rate (Required, %):</label>
+                                <input type="number" id="interest-rate-monthly" step="0.01" required>
+
+                                <label for="duration-monthly">Duration (Required, Months 1-6):</label>
+                                <input type="number" id="duration-monthly" min="1" max="6" required>
+
+                                <label for="repayment-date-monthly">Repayment Date (Optional):</label>
+                                <input type="date" id="repayment-date-monthly">
+
+                                <button type="submit">Submit Monthly Loan Application</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

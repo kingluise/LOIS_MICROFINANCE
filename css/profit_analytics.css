@@ -1,0 +1,443 @@
+/* css/customer.css */
+
+/* ====== Sidebar Styling (Matches Dashboard) ====== */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 15px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 80px;
+    margin-bottom: 10px;
+}
+
+.sidebar h2 {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: #27ae60;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu li {
+    margin: 15px 0;
+}
+
+.menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.menu a:hover {
+    background: #27ae60;
+}
+
+/* ====== Page Body Background (Matches Dashboard) ====== */
+body {
+    background: linear-gradient(to right, #2c3e50, #27ae60);
+    font-family: Arial, sans-serif;
+}
+
+/* ====== Main Content Styling ====== */
+.container {
+    margin-left: 270px;
+    padding: 20px;
+}
+
+/* ====== Payment Management Styling ====== */
+#paymentManagement {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#paymentButtons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#logPaymentForm,
+#pendingApprovals {
+    margin-top: 20px;
+}
+
+#approvalsTable {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#approvalsTable th,
+#approvalsTable td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+#approvalsTable th {
+    background: #14213D;
+    color: white;
+    font-weight: bold;
+}
+
+#approvalsTable tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+#approvalsTable tr:hover {
+    background: rgba(20, 33, 61, 0.1);
+}
+
+/* Payment buttons */
+#paymentButtons button {
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 15px;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    background: #14213D;
+    color: white;
+}
+
+#paymentButtons button:hover {
+    background: #FCA311;
+    color: #14213D;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* log payment form styling */
+#logPaymentForm {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+}
+
+#logPaymentForm h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #343a40;
+    font-size: 1.2rem;
+}
+
+#paymentForm label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #495057;
+    font-size: 0.9rem;
+}
+
+#paymentForm input,
+#paymentForm select {
+    width: calc(100% - 12px);
+    padding: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+#paymentForm input:focus,
+#paymentForm select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+#paymentForm button[type="submit"] {
+    background: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+#paymentForm button[type="submit"]:hover {
+    background: #0056b3;
+}
+
+/* Hidden class*/
+.hidden{
+    display: none;
+}
+
+/* ====== Responsive Design (Mobile-Friendly) ====== */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .container {
+        margin-left: 0;
+        padding: 10px;
+    }
+
+    #paymentManagement {
+        width: 90%;
+    }
+
+    #approvalsTable {
+        font-size: 14px;
+    }
+
+    #paymentButtons {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    #logPaymentForm {
+        padding: 15px;
+        max-width: 90%;
+    }
+}
+
+/* ====== Profit Analysis Page Specific Styles ====== */
+#profitAnalysis {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#profitAnalysisControls {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+#profitAnalysisControls label {
+    font-weight: bold;
+    color: #333;
+}
+
+#profitAnalysisControls select,
+#profitAnalysisControls input[type="number"],
+#profitAnalysisControls input[type="date"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+#profitAnalysisControls button {
+    background: #27ae60; /* Use your primary green color */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+#profitAnalysisControls button:hover {
+    background: #1e8449; /* Darker shade for hover */
+}
+
+#profitAnalysisTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#profitAnalysisTable th,
+#profitAnalysisTable td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+#profitAnalysisTable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #333;
+}
+
+#profitAnalysisTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#profitAnalysisTable tr:hover {
+    background-color: #e6e6e6;
+}
+
+/* Styles for specific filter sections (initially hidden) */
+#monthYearSelector,
+#quarterYearSelector,
+#yearOnlySelector,
+#customRangeSelector {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* ====== Styles for Custom Date Range Picker ====== */
+#customRangeSelector {
+    display: none; /* Initially hidden */
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+#customRangeSelector label {
+    font-weight: bold;
+    color: #333;
+}
+
+#customRangeSelector input[type="date"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+/* ====== Styles for Export Options ====== */
+#exportOptions {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+#exportOptions label {
+    font-weight: bold;
+    color: #333;
+}
+
+#exportOptions button {
+    background: #007bff; /* Primary blue color */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#exportOptions button:hover {
+    background: #0056b3; /* Darker shade for hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* ====== Responsive Adjustments for Profit Analysis ====== */
+@media (max-width: 768px) {
+    #profitAnalysis {
+        width: 90%; /* Adjust width for smaller screens if needed */
+    }
+
+    #profitAnalysisControls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #profitAnalysisControls > div { /* Style the individual filter selectors */
+        width: 100%;
+        margin-bottom: 10px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #profitAnalysisControls label {
+        margin-bottom: 5px;
+    }
+
+    #profitAnalysisControls select,
+    #profitAnalysisControls input[type="number"],
+    #profitAnalysisControls input[type="date"],
+    #profitAnalysisControls button {
+        width: calc(100% - 16px); /* Adjust for padding */
+    }
+
+    #profitAnalysisControls > div > button { /* Apply full width to buttons within selectors */
+        width: 100%;
+    }
+
+    #profitAnalysisTable {
+        font-size: 14px; /* Adjust font size for better readability */
+    }
+
+    #exportOptions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #exportOptions button {
+        width: calc(100% - 16px);
+    }
+}
+
+@media (max-width: 480px) {
+    #profitAnalysis {
+        width: 95%; /* Further adjust width for very small screens */
+        padding: 15px;
+    }
+
+    #profitAnalysisTable {
+        font-size: 12px; /* Further reduce font size on smaller screens */
+    }
+
+    #profitAnalysisTable th,
+    #profitAnalysisTable td {
+        padding: 8px;
+    }
+
+    #exportOptions label {
+        margin-bottom: 5px;
+    }
+
+    #exportOptions button {
+        width: 100%;
+    }
+}
