@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Notifications</title>
+    <link rel="stylesheet" href="css/notification.css">
+    <script src="js/notification.js" defer></script>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo-title">
+            <img src="image/loism.png" alt="Logo" class="logo">
+            <h2>Lois Microfinance</h2>
+        </div>
+        <ul class="menu">
+            <li><a href="operator_dashboard.html">🏠 Home</a></li>
+            <li><a href="operator_customer.html">👥 Manage Customers</a></li>
+            <li><a href="operator_loan.html">💰 Manage Loans</a></li>
+            <li><a href="operator_payment.html">💳 Payments</a></li>
+            <li class="active"><a href="operator_notification.html">🔔 Notifications</a></li>
+            <li><a href="index.html" id="logout">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h1>Loan Notifications</h1>
+
+        <div class="filter-search">
+            <select id="filterDropdown">
+                <option value="all">All Loans</option>
+                <option value="dueToday">Due Today</option>
+                <option value="dueTomorrow">Due Tomorrow</option>
+                <option value="dueInTwoDays">Due in 2 Days</option>
+            </select>
+            <input type="text" id="searchBar" placeholder="Search by Customer ID or Loan ID">
+        </div>
+
+        <table id="loanNotificationsTable">
+            <thead>
+                <tr>
+                    <th>Loan ID</th>
+                    <th>Customer ID</th>
+                    <th>Customer Name</th>
+                    <th>Loan Type</th>
+                    <th>Due Date</th>
+                    <th>Amount Due</th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
+    </div>
+</body>
+</html>

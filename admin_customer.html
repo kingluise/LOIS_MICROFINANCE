@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Customers</title>
+    <link rel="stylesheet" href="css/customer.css">
+    <script src="js/admin_customer.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo-title">
+            <img src="image/loism.png" alt="Logo" class="logo">
+            <h2>Lois Microfinance</h2>
+        </div>
+        <ul class="menu">
+            <li><a href="admin_dashboard.html">🏠 Home</a></li>
+            <li class="active"><a href="admin_customer.html">👥 Manage Customers</a></li>
+            <li><a href="admin_loan.html">💰 Manage Loans</a></li>
+            <li><a href="admin_payment.html">💳 Payments</a></li>
+            <li class="active"><a href="admin_notification.html">🔔 Notifications</a></li>
+            <li><a href="profit_analytics.html">📊 Profit Analytics</a></li>
+            <li><a href="index.html" id="logout">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h1>Manage Customers</h1>
+
+        <input type="text" id="searchBar" placeholder="Search customers...">
+
+        <button id="addCustomerBtn">+ Add New Customer</button>
+
+        <table id="customer-list">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="customer-list">
+            </tbody>
+        </table>
+    </div>
+
+    <div id="customerFormContainer" class="hidden">
+        <form id="customerForm">
+            <div class="progress-bar">
+                <div id="progress"></div>
+            </div>
+
+            <fieldset class="form-step">
+                <h3>Step 1: Personal Information</h3>
+                <label>Full Name:</label>
+                <input type="text" id="fullName" name="fullName" required pattern="[A-Za-z\s]+" title="Please enter a valid name. Only letters and spaces are allowed.">
+
+                <label>Date of Birth:</label>
+                <input type="date" id="dob" name="dob" required>
+
+                <label>Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="" disabled selected>Select your gender</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                </select>
+
+                <label>Marital Status:</label>
+                <select id="maritalStatus" name="maritalStatus" required>
+                    <option value="" disabled selected>Select your marital status</option>
+                    <option>Single</option>
+                    <option>Married</option>
+                    <option>Others</option>
+                </select>
+
+                <label>Residential Address:</label>
+                <input type="text" id="address" name="address" required>
+
+                <button type="button" class="next-step">Next</button>
+            </fieldset>
+
+            <fieldset class="form-step hidden">
+                <h3>Step 2: Employment & ID</h3>
+                <label>Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label>Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number.">
+
+                <label>Employment Status:</label>
+                <select id="employment_status" name="employment_status" required>
+                    <option value="" disabled selected>Select your employment status</option>
+                    <option>Employed</option>
+                    <option>Self-Employed</option>
+                    <option>Unemployed</option>
+                </select>
+
+                <label>Monthly Income:</label>
+                <input type="number" id="income" name="income" required min="0" title="Please enter a valid income.">
+
+                <label>ID Type:</label>
+                <select id="idType" name="idType" required>
+                    <option value="" disabled selected>Select ID type</option>
+                    <option>Passport</option>
+                    <option>NIN</option>
+                    <option>Voter’s Card</option>
+                    <option>Driver’s License</option>
+                </select>
+
+                <label>ID Number:</label>
+                <input type="text" id="idNumber" name="idNumber" required>
+
+                <label>Upload ID:</label>
+                <input type="file" id="idUpload" name="idUpload" accept=".jpg,.png,.pdf" required>
+
+                <label>BVN Number:</label>
+                <input type="text" id="bvn" name="bvn" required pattern="[0-9]{11}" title="Please enter a valid 11-digit BVN number.">
+
+                <label>Upload Passport Photograph:</label>
+                <input type="file" id="passportUpload" name="passportUpload" accept=".jpg,.png" required>
+
+                <button type="button" class="prev-step">Previous</button>
+                <button type="button" class="next-step">Next</button>
+            </fieldset>
+
+            <fieldset class="form-step hidden">
+                <h3>Step 3: Guarantor</h3>
+                <label>Guarantor Name:</label>
+                <input type="text" id="nextKinName" name="nextKinName" required pattern="[A-Za-z\s]+" title="Please enter a valid name. Only letters and spaces are allowed.">
+
+                <label>Guarantor Relationship:</label>
+                <input type="text" id="nextKinRelation" name="nextKinRelation" required>
+
+                <label>Guarantor Phone Number:</label>
+                <input type="tel" id="nextKinPhone" name="nextKinPhone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number.">
+
+                <label>Guarantor Email:</label>
+                <input type="email" id="guarantorEmail" name="guarantorEmail" required>
+
+                <label>ID Type:</label>
+                <select id="guarantorIdType" name="guarantorIdType" required>
+                    <option value="" disabled selected>Select ID type</option>
+                    <option>Passport</option>
+                    <option>NIN</option>
+                    <option>Voter’s Card</option>
+                    <option>Driver’s License</option>
+                </select>
+
+                <label>ID Number:</label>
+                <input type="text" id="guarantorIdNumber" name="guarantorIdNumber" required>
+
+                <label>Upload ID:</label>
+                <input type="file" id="guarantorIdUpload" name="guarantorIdUpload" accept=".jpg,.png,.pdf" required>
+
+                <button type="button" class="prev-step">Previous</button>
+                <button type="submit">Submit</button>
+            </fieldset>
+        </form>
+    </div>
+
+    <div id="editModal" style="display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
+        <div style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%;">
+            <span id="closeModal" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+            <h2>Edit Customer</h2>
+            <form id="editForm">
+                <label for="editFullName">Full Name:</label><br>
+                <input type="text" id="editFullName" placeholder="Full Name" required pattern="[A-Za-z\s]+" title="Please enter a valid name. Only letters and spaces are allowed."><br><br>
+
+                <label for="editPhone">Phone:</label><br>
+                <input type="tel" id="editPhone" placeholder="Phone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number."><br><br>
+
+                <label for="editEmail">Email:</label><br>
+                <input type="email" id="editEmail" placeholder="Email" required><br><br>
+
+                <label for="editDob">Date of Birth:</label><br>
+                <input type="date" id="editDob" placeholder="Date of Birth" required><br><br>
+
+                <label for="editGender">Gender:</label><br>
+                <input type="text" id="editGender" placeholder="Gender" required><br><br>
+
+                <label for="editMaritalStatus">Marital Status:</label><br>
+                <input type="text" id="editMaritalStatus" placeholder="Marital Status" required><br><br>
+
+                <label for="editEmployment_status">Employment Status:</label><br>
+                <input type="text" id="editEmployment_status" placeholder="Employment Status" required><br><br>
+
+                <label for="editIncome">Income:</label><br>
+                <input type="number" id="editIncome" placeholder="Income" required min="0" title="Please enter a valid income."><br><br>
+
+                <label for="editIdType">ID Type:</label><br>
+                <input type="text" id="editIdType" placeholder="ID Type" required><br><br>
+
+                <label for="editIdNumber">ID Number:</label><br>
+                <input type="text" id="editIdNumber" placeholder="ID Number" required><br><br>
+
+                <label for="editGuarantorFullName">Guarantor Name:</label><br>
+                <input type="text" id="editGuarantorFullName" placeholder="Guarantor fullName" required pattern="[A-Za-z\s]+" title="Please enter a valid name. Only letters and spaces are allowed."><br><br>
+
+                <label for="editRelationshipToBorrower">Relationship To Borrower:</label><br>
+                <input type="text" id="editRelationshipToBorrower" placeholder="Relationship To Borrower" required><br><br>
+
+                <label for="editResidentialAddress">Residential Address:</label><br>
+                <input type="text" id="editResidentialAddress" placeholder="Residential Address" required><br><br>
+
+                <label for="editPhone">Phone Number:</label><br>
+                <input type="tel" id="editPhone" placeholder="Phone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number."><br><br>
+
+                <label for="editEmail">Email:</label><br>
+                <input type="email" id="editEmail" placeholder="Email" required><br><br>
+
+                <label for="editIdType">ID Type:</label><br>
+                <input type="text" id="editIdType" placeholder="ID Type" required><br><br>
+
+                <label for="editIdNumber">ID Number:</label><br>
+                <input type="text" id="editIdNumber" placeholder="ID Number" required><br><br>
+
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
