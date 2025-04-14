@@ -1,3 +1,4 @@
+
 /* Global Styles */
 body {
     margin: 0;
@@ -168,16 +169,25 @@ body {
 /* Analytics Section */
 .analytics {
     margin-top: 30px;
-    background: rgba(255, 255, 255, 0.1);
+    background: white;
     padding: 20px;
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    color: #333;
+    width: 80% !important; /* Increased width to 80% */
+    margin-left: auto !important;
+    margin-right: auto !important;
 }
 
 .analytics h2 {
     font-size: 22px;
     margin-bottom: 15px;
+}
+
+.analytics canvas#loanChart {
+    width: 100% !important;
+    height: auto !important;
 }
 
 /* Transactions Section */

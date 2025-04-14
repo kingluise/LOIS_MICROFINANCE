@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profit Analytics</title>
+    <link rel="stylesheet" href="css/profit_analytics.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0Hhonpy AIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="js/profit_analytics.js" defer></script>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo-title">
+            <img src="images/LOIS.png" alt="Logo" class="logo">
+            <h2>Lois Microfinance</h2>
+        </div>
+        <ul class="menu">
+            <li><a href="admin_dashboard.html">🏠 Home</a></li>
+            <li><a href="admin_customer.html">👥 Manage Customers</a></li>
+            <li><a href="admin_loan.html">💰 Manage Loans</a></li>
+            <li><a href="admin_payment.html">💳 Payments</a></li>
+            <li><a href="admin_notification.html">🔔 Notifications</a></li>
+            <li class="active"><a href="admin_profit_analysis.html">📊 Profit Analytics</a></li>
+            <li><a href="index.html" id="logout">🚪 Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <div id="profitAnalysis">
+            <h2><i class="fas fa-chart-line"></i> Profit Analytics</h2>
+
+            <div id="profitAnalysisControls">
+                <label for="filterPeriod">Filter By:</label>
+                <select id="filterPeriod">
+                    <option value="monthly">Monthly</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="yearly">Yearly</option>
+                    <option value="custom">Custom Range</option>
+                </select>
+
+                <div id="monthYearSelector" style="display: none;">
+                    <label for="month">Month:</label>
+                    <select id="month">
+                        <option value="01">January</option>
+                        <option value="02">February</option>
+                        <option value="03">March</option>
+                        <option value="04">April</option>
+                        <option value="05">May</option>
+                        <option value="06">June</option>
+                        <option value="07">July</option>
+                        <option value="08">August</option>
+                        <option value="09">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                    <label for="year">Year:</label>
+                    <input type="number" id="year" placeholder="YYYY">
+                    <button id="applyMonthYearFilter">Apply</button>
+                </div>
+
+                <div id="quarterYearSelector" style="display: none;">
+                    <label for="quarter">Quarter:</label>
+                    <select id="quarter">
+                        <option value="1">Q1</option>
+                        <option value="2">Q2</option>
+                        <option value="3">Q3</option>
+                        <option value="4">Q4</option>
+                    </select>
+                    <label for="yearQuarter">Year:</label>
+                    <input type="number" id="yearQuarter" placeholder="YYYY">
+                    <button id="applyQuarterYearFilter">Apply</button>
+                </div>
+
+                <div id="yearOnlySelector" style="display: none;">
+                    <label for="onlyYear">Year:</label>
+                    <input type="number" id="onlyYear" placeholder="YYYY">
+                    <button id="applyYearFilter">Apply</button>
+                </div>
+
+                <div id="customRangeSelector" style="display: none;">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate">
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="endDate">
+                    <button id="applyCustomRangeFilter">Apply</button>
+                </div>
+            </div>
+
+            <table id="profitAnalysisTable">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Total Disbursement</th>
+                        <th>Total Repayment</th>
+                        <th>Interest Earned</th>
+                        <th>Overdue Loans</th>
+                        <th>Total Overdue Amount</th>
+                        <th>Profit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+
+            <div id="exportOptions">
+                <label>Export As:</label>
+                <button id="exportPdfBtn"><i class="fas fa-file-pdf"></i> PDF</button>
+                <button id="exportXmlBtn"><i class="fas fa-file-code"></i> XML</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

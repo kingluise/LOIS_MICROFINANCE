@@ -1,7 +1,7 @@
 /* Global Styles */
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif; /* Using Poppins as an example - see instructions below to change */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -32,11 +32,12 @@ body {
 }
 
 .branding img {
-    width: 50px;
+    width: 100px; /* Increased logo size */
 }
 
 .branding h2 {
     margin: 10px 0;
+    font-weight: bold; /* Making the heading bold */
 }
 
 /* Right Panel */
@@ -53,6 +54,7 @@ body {
 
 h2 {
     margin-bottom: 20px;
+    font-weight: bold; /* Making the subheading bold */
 }
 
 .input-group {
@@ -62,6 +64,7 @@ h2 {
 label {
     display: block;
     margin-bottom: 5px;
+    font-weight: bold; /* Making the labels bold */
 }
 
 input {
@@ -69,17 +72,20 @@ input {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 1em; /* Ensuring input text is readable */
 }
 
 button {
     width: 100%;
-    padding: 10px;
+    padding: 12px; /* Slightly increased button padding */
     border: none;
     background: #27ae60;
     color: white;
     font-size: 16px;
     border-radius: 5px;
     cursor: pointer;
+    font-weight: bold; /* Making the button text bold */
+    transition: background-color 0.3s ease; /* Adding a smooth hover transition */
 }
 
 button:hover {

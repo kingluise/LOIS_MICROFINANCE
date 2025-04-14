@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment Management</title>
     <link rel="stylesheet" href="css/payment.css">
-    <script src="js/payment.js" defer></script>
+    <script src="js/admin_payment.js" defer></script>
     <style>
         .hidden {
             display: none;
@@ -17,13 +17,15 @@
     <div class="sidebar">
         <div class="logo-title">
             <img src="images/LOIS.png" alt="Logo" class="logo">
-            <h2>Lois Microfinance Bank</h2>
+            <h2>Lois Microfinance</h2>
         </div>
         <ul class="menu">
             <li><a href="admin_dashboard.html">🏠 Home</a></li>
             <li><a href="admin_customer.html">👥 Manage Customers</a></li>
             <li><a href="admin_loan.html">💰 Manage Loans</a></li>
-            <li class="active"><a href="admin_payments.html">💳 Payments</a></li>
+            <li class="active"><a href="admin_payment.html">💳 Payments</a></li>
+            <li class="active"><a href="admin_notification.html">🔔 Notifications</a></li>
+            <li><a href="profit_analytics.html">📊 Profit Analytics</a></li>
             <li><a href="index.html" id="logout">🚪 Logout</a></li>
         </ul>
     </div>
@@ -34,7 +36,7 @@
 
             <div id="paymentButtons">
                 <button id="logPaymentBtn">Log Payment</button>
-                <button id="pendingApprovalsBtn">Pending Approvals</button>
+                <button id="paymentConfirmationBtn">Payment Confirmation</button>
             </div>
 
             <div id="logPaymentForm" class="hidden">
@@ -65,16 +67,20 @@
                         <option value="pos">POS</option>
                     </select><br><br>
 
+                    <label for="paymentDate">Payment Date:</label>
+                    <input type="date" id="paymentDate" name="paymentDate" required><br><br>
+
                     <label for="newLoanBalance">New Loan Balance:</label>
                     <input type="number" id="newLoanBalance" name="newLoanBalance" readonly><br><br>
 
                     <button type="submit">Submit</button>
+                    <button type="button" id="cancelLogPayment">Cancel</button>
                 </form>
             </div>
 
-            <div id="pendingApprovals" class="hidden">
-                <h3>Pending Approvals</h3>
-                <table id="approvalsTable">
+            <div id="confirmationTableContainer" class="hidden">
+                <h3>Payment Confirmation</h3>
+                <table id="confirmationTable">
                     <thead>
                         <tr>
                             <th>Customer ID</th>
@@ -84,14 +90,15 @@
                             <th>Total Balance</th>
                             <th>Amount Paid</th>
                             <th>Mode of Payment</th>
+                            <th>Payment Date</th>
                             <th>New Loan Balance</th>
-                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                    </tbody>
+                        </tbody>
                 </table>
+                <button id="goBackBtn">Go Back</button>
             </div>
 
         </div>

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loan Management</title>
     <link rel="stylesheet" href="css/loan.css">
-    <script src="js/admin_loan.js" defer></script>
+    <script src="js/operator_loan.js" defer></script>
 </head>
 
 <body>
@@ -18,22 +18,21 @@
                 <h2>Lois Microfinance</h2>
             </div>
             <ul class="menu">
-                <li><a href="admin_dashboard.html">🏠 Home</a></li>
-                <li><a href="admin_customers.html">👥 Manage Customers</a></li>
-                <li class="active"><a href="admin_loan.html">💰 Manage Loans</a></li>
-                <li><a href="admin_payment.html">💳 Payments</a></li>
-                <li class="active"><a href="admin_notification.html">🔔 Notifications</a></li>
-                <li><a href="profit_analytics.html">📊 Profit Analytics</a></li>
+                <li><a href="operator_dashboard.html">🏠 Home</a></li>
+                <li><a href="operator_customer.html">👥 Manage Customers</a></li>
+                <li class="active"><a href="operator_loan.html">💰 Manage Loans</a></li>
+                <li><a href="operator_payment.html">💳 Payments</a></li>
+                <li><a href="operator_notification.html">🔔 Notifications</a></li>
                 <li><a href="index.html" id="logout">🚪 Logout</a></li>
             </ul>
         </div>
+
 
         <div class="main-content">
             <h1>Loan Management</h1>
 
             <div class="loan-actions">
                 <button id="new-loan-btn">New Loan Application</button>
-                <button id="pending-approvals-btn">Pending Approvals</button>
                 <select id="loan-type-filter">
                     <option value="all">All Loans</option>
                     <option value="weekly">Weekly Loans</option>
@@ -63,27 +62,6 @@
                         <tbody>
                         </tbody>
                     </table>
-                </div>
-
-                <div id="pending-loans-table-container" class="loan-table" style="display: none;">
-                    <h2>Pending Loan Approvals</h2>
-                    <table id="pending-loans-table">
-                        <thead>
-                            <tr>
-                                <th>Customer ID</th>
-                                <th>Full Name</th>
-                                <th>Loan Amount</th>
-                                <th>Interest Rate</th>
-                                <th>Loan Type</th>
-                                <th>Total Payment</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                    <button id="back-to-loans-btn">Back to All Loans</button>
                 </div>
 
                 <div id="new-loan-modal" class="modal">

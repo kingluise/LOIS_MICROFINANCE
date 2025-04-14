@@ -1,151 +1,114 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const loginForm = document.getElementById('loginForm');
+// js/dashboard.js
 
-    if (loginForm) {
-        loginForm.addEventListener('submit', function(event) {
-            event.preventDefault(); 
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to get the current time and format it
+    function updateDateTime() {
+        const now = new Date();
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-            let email = document.getElementById('email').value;
-            let password = document.getElementById('password').value;
-            let role = document.getElementById('role').value;
+        const dayName = days[now.getDay()];
+        const month = months[now.getMonth()];
+        const day = now.getDate();
+        const year = now.getFullYear();
+        let hours = now.getHours();
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const seconds = now.getSeconds().toString().padStart(2, '0');
+        const ampm = hours >= 12 ? 'PM' : 'AM';
 
-            if (email && password) {
-                // Simulate login by storing role in localStorage
-                localStorage.setItem("userRole", role);
-                window.location.href = "dashboard.html";
-            } else {
-                alert("Please enter both email and password.");
-            }
-        });
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+
+        const dateTimeString = `${dayName}, ${month} ${day}, ${year} ${hours}:${minutes}:${seconds} ${ampm}`;
+        return dateTimeString;
     }
-    document.addEventListener("DOMContentLoaded", () => {
-        const apiBaseUrl = "https://api.example.com"; // Replace with actual API endpoint
-    
-        // Elements for Dashboard Cards
-        const totalLoans = document.getElementById("total-loans");
-        const pendingLoans = document.getElementById("pending-loans");
-        const activeLoans = document.getElementById("active-loans");
-        const overdueLoans = document.getElementById("overdue-loans");
-        const totalCustomers = document.getElementById("total-customers");
-        const duePayments = document.getElementById("due-payments");
-        const dueLoans = document.getElementById("due-loans");
-        const totalPrincipal = document.getElementById("total-principal");
-        const totalInterest = document.getElementById("total-interest");
-    
-        // Fetch Dashboard Data
-        async function fetchDashboardData() {
-            try {
-                const response = await fetch(`${apiBaseUrl}/dashboard`);
-                const data = await response.json();
-    
-                // Populate Dashboard Cards
-                totalLoans.textContent = `₦${data.totalLoans}`;
-                pendingLoans.textContent = data.pendingApprovals;
-                activeLoans.textContent = data.activeLoans;
-                overdueLoans.textContent = data.overdueLoans;
-                totalCustomers.textContent = data.totalCustomers;
-                duePayments.textContent = `₦${data.duePayments}`;
-                dueLoans.textContent = data.dueLoans;
-                totalPrincipal.textContent = `₦${data.totalPrincipal}`;
-                totalInterest.textContent = `₦${data.totalInterest}`;
-            } catch (error) {
-                console.error("Error fetching dashboard data:", error);
-            }
-        }
-    
-        // Fetch Recent Transactions
-        async function fetchTransactions() {
-            try {
-                const response = await fetch(`${apiBaseUrl}/transactions`);
-                const transactions = await response.json();
-    
-                const transactionsTable = document.querySelector(".transactions table");
-                transactionsTable.innerHTML = `
-                    <tr>
-                        <th>Customer</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                    </tr>
-                `;
-    
-                transactions.forEach(transaction => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${transaction.customer}</td>
-                        <td>₦${transaction.amount}</td>
-                        <td class="${transaction.status.toLowerCase()}">${transaction.status}</td>
-                    `;
-                    transactionsTable.appendChild(row);
-                });
-            } catch (error) {
-                console.error("Error fetching transactions:", error);
-            }
-        }
-    
-        // Fetch Loan Analytics Data and Render Chart
-        async function fetchAnalytics() {
-            try {
-                const response = await fetch(`${apiBaseUrl}/analytics`);
-                const data = await response.json();
-    
-                const ctx = document.getElementById("loanChart").getContext("2d");
-                new Chart(ctx, {
-                    type: "bar",
-                    data: {
-                        labels: ["Total Loans", "Pending", "Active", "Overdue"],
-                        datasets: [{
-                            label: "Loan Statistics",
-                            data: [data.totalLoans, data.pendingApprovals, data.activeLoans, data.overdueLoans],
-                            backgroundColor: ["#3498db", "#f1c40f", "#2ecc71", "#e74c3c"]
-                        }]
-                    },
-                    options: {
-                        responsive: true
-                    }
-                });
-            } catch (error) {
-                console.error("Error fetching analytics data:", error);
-            }
-        }
-    
-        // Search Functionality
-        document.querySelector(".search-bar button").addEventListener("click", () => {
-            const query = document.querySelector(".search-bar input").value;
-            window.location.href = `${apiBaseUrl}/search?query=${query}`;
-        });
-    
-        // Initialize Fetch Calls
-        fetchDashboardData();
-        fetchTransactions();
-        fetchAnalytics();
-    });
-    
-    // Redirect users based on their roles when they reach the dashboard
-    document.addEventListener("DOMContentLoaded", function() {
-        let userRole = localStorage.getItem("userRole");
 
-        if (!userRole) {
-            alert("You need to log in first!");
-            window.location.href = "index.html"; // Redirect to login if not logged in
-        }
+    // Function to set the greeting based on the time of day
+    function getGreeting() {
+        const now = new Date();
+        const hours = now.getHours();
 
-        document.getElementById("userRoleDisplay").innerText = userRole.toUpperCase();
-
-        // Hide sections based on user role
-        if (userRole === "operator") {
-            document.getElementById("customers_section").style.display = "none"; // Hide customer management
-            document.getElementById("superadmin_section").style.display = "none"; // Hide Super Admin section
-        } else if (userRole === "superadmin") {
-            document.getElementById("superadmin_section").style.display = "block"; // Show Super Admin menu
+        if (hours < 12) {
+            return 'Good Morning';
+        } else if (hours < 18) {
+            return 'Good Afternoon';
+        } else {
+            return 'Good Evening';
         }
+    }
+
+    // Function to update the greeting and time in the dashboard header
+    function updateHeader() {
+        const greeting = getGreeting();
+        const dateTime = updateDateTime();
+        const headerElement = document.querySelector('.welcome-message h2');
+
+        // Check login role (using dummy role from localStorage, replace with actual logic)
+        const userRole = localStorage.getItem('userRole'); // Replace with actual logic
+        const welcomeMessage = userRole === 'admin' ? 'Welcome Admin' : 'Welcome Operator';
+
+        headerElement.innerHTML = `${greeting}, ${welcomeMessage} <br> ${dateTime}`;
+    }
+
+    // Update the header immediately and then every second
+    updateHeader();
+    setInterval(updateHeader, 1000);
+
+    // Remove search bar from the DOM
+    const searchBar = document.querySelector('.search-bar');
+    if (searchBar) {
+        searchBar.remove();
+    }
+
+    // Example: Populate dashboard cards (replace with your actual data fetching)
+    document.getElementById('total-loans').textContent = '₦150,000';
+    document.getElementById('pending-loans').textContent = '5';
+    document.getElementById('active-loans').textContent = '10';
+    document.getElementById('overdue-loans').textContent = '2';
+    document.getElementById('total-customers').textContent = '50';
+    document.getElementById('due-payments').textContent = '₦25,000';
+    document.getElementById('total-principal').textContent = '₦120,000';
+    document.getElementById('total-interest').textContent = '₦30,000';
+
+    // Example: Populate transaction table (replace with your actual data fetching)
+    const transactionsTable = document.querySelector('.transactions table');
+    const transactions = [
+        { customer: 'John Doe', amount: '₦10,000', status: 'Completed' },
+        { customer: 'Jane Smith', amount: '₦5,000', status: 'Pending' },
+        { customer: 'Alice Johnson', amount: '₦20,000', status: 'Approved' }
+    ];
+
+    transactions.forEach(transaction => {
+        const row = transactionsTable.insertRow();
+        const customerCell = row.insertCell();
+        const amountCell = row.insertCell();
+        const statusCell = row.insertCell();
+
+        customerCell.textContent = transaction.customer;
+        amountCell.textContent = transaction.amount;
+        statusCell.textContent = transaction.status;
     });
 
-    // Logout functionality
-    const logoutBtn = document.getElementById("logout");
-    if (logoutBtn) {
-        logoutBtn.addEventListener("click", function() {
-            localStorage.removeItem("userRole"); // Clear session
-            window.location.href = "index.html"; // Redirect to login
-        });
-    }
+    // Example: Chart.js (replace with your actual chart data)
+    const loanChartCanvas = document.getElementById('loanChart').getContext('2d');
+    new Chart(loanChartCanvas, {
+        type: 'bar',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+            datasets: [{
+                label: 'Loan Applications',
+                data: [12, 19, 3, 5, 2],
+                backgroundColor: 'blue', // Changed to blue
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
 });
