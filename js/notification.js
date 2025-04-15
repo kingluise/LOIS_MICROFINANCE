@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     const filterDropdown = document.getElementById('filterDropdown');
     const searchBar = document.getElementById('searchBar');

@@ -1,3 +1,4 @@
+
 /* ====== Sidebar Styling (Matches Dashboard) ====== */
 /* Sidebar Navigation */
 .sidebar {
@@ -429,3 +430,5 @@ button {
 #pending-approvals tbody tr:hover {
     background: rgba(20, 33, 61, 0.1);
 }
+
+

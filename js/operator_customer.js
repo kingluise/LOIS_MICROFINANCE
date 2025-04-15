@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     const filterDropdown = document.getElementById('filterDropdown');
     const searchBar = document.getElementById('searchBar');
@@ -84,3 +85,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial load
     fetchLoanNotifications();
 });
+

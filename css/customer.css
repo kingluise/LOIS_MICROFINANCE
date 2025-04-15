@@ -1,3 +1,4 @@
+
 /* ====== Sidebar Styling (Matches Dashboard) ====== */
 /* Sidebar Navigation */
 .sidebar {
@@ -308,3 +309,5 @@ button.next-step:hover, button.prev-step:hover, button[type="submit"]:hover {
         flex-direction: column;
     }
 }
+
+

@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     const logPaymentBtn = document.getElementById('logPaymentBtn');
     const paymentConfirmationBtn = document.getElementById('paymentConfirmationBtn');
@@ -117,3 +118,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+

@@ -1,3 +1,4 @@
+
 // js/dashboard.js
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -112,3 +113,5 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// js/dashboard.js

@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     const filterPeriod = document.getElementById('filterPeriod');
     const monthYearSelector = document.getElementById('monthYearSelector');

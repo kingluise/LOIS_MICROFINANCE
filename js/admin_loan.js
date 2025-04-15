@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
     // Variable Declarations
     const newLoanBtn = document.getElementById("new-loan-btn");

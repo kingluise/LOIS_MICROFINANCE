@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     const addCustomerBtn = document.getElementById('addCustomerBtn');
     const customerFormContainer = document.getElementById('customerFormContainer');
@@ -329,3 +330,4 @@ function viewCustomer(customer) {
     newTab.document.close();
 }
 });
+

@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     const logPaymentBtn = document.getElementById('logPaymentBtn');
     const logPaymentForm = document.getElementById('logPaymentForm');
