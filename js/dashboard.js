@@ -1,5 +1,4 @@
 
-// js/dashboard.js
 
 document.addEventListener('DOMContentLoaded', function() {
     // Function to get the current time and format it
@@ -61,57 +60,77 @@ document.addEventListener('DOMContentLoaded', function() {
         searchBar.remove();
     }
 
-    // Example: Populate dashboard cards (replace with your actual data fetching)
-    document.getElementById('total-loans').textContent = '₦150,000';
-    document.getElementById('pending-loans').textContent = '5';
-    document.getElementById('active-loans').textContent = '10';
-    document.getElementById('overdue-loans').textContent = '2';
-    document.getElementById('total-customers').textContent = '50';
-    document.getElementById('due-payments').textContent = '₦25,000';
-    document.getElementById('total-principal').textContent = '₦120,000';
-    document.getElementById('total-interest').textContent = '₦30,000';
+    // Function to fetch and populate dashboard summary cards
+    function fetchDashboardSummary() {
+        fetch('/api/dashboard/summary') // Replace with your actual endpoint
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('total-loans').textContent = `₦${data.totalLoans.toLocaleString()}`;
+                document.getElementById('pending-loans').textContent = data.pendingLoans;
+                document.getElementById('active-loans').textContent = data.activeLoans;
+                document.getElementById('overdue-loans').textContent = data.overdueLoans;
+                document.getElementById('total-customers').textContent = data.totalCustomers;
+                document.getElementById('due-payments').textContent = `₦${data.duePayments.toLocaleString()}`;
+                document.getElementById('total-principal').textContent = `₦${data.totalPrincipal.toLocaleString()}`;
+                document.getElementById('total-interest').textContent = `₦${data.totalInterest.toLocaleString()}`;
+            })
+            .catch(error => console.error('Error fetching dashboard summary:', error));
+    }
 
-    // Example: Populate transaction table (replace with your actual data fetching)
-    const transactionsTable = document.querySelector('.transactions table');
-    const transactions = [
-        { customer: 'John Doe', amount: '₦10,000', status: 'Completed' },
-        { customer: 'Jane Smith', amount: '₦5,000', status: 'Pending' },
-        { customer: 'Alice Johnson', amount: '₦20,000', status: 'Approved' }
-    ];
+    // Function to fetch and populate transaction table
+    function fetchTransactions() {
+        const transactionsTable = document.querySelector('.transactions table tbody'); // Target the tbody
+        transactionsTable.innerHTML = ''; // Clear existing rows
 
-    transactions.forEach(transaction => {
-        const row = transactionsTable.insertRow();
-        const customerCell = row.insertCell();
-        const amountCell = row.insertCell();
-        const statusCell = row.insertCell();
+        fetch('/api/dashboard/transactions?limit=5') // Replace with your actual endpoint and parameters
+            .then(response => response.json())
+            .then(transactions => {
+                transactions.forEach(transaction => {
+                    const row = transactionsTable.insertRow();
+                    const customerCell = row.insertCell();
+                    const amountCell = row.insertCell();
+                    const statusCell = row.insertCell();
 
-        customerCell.textContent = transaction.customer;
-        amountCell.textContent = transaction.amount;
-        statusCell.textContent = transaction.status;
-    });
+                    customerCell.textContent = transaction.customerName; // Adjust property name
+                    amountCell.textContent = `₦${transaction.amount.toLocaleString()}`; // Adjust property name
+                    statusCell.textContent = transaction.status; // Adjust property name
+                });
+            })
+            .catch(error => console.error('Error fetching transactions:', error));
+    }
 
-    // Example: Chart.js (replace with your actual chart data)
-    const loanChartCanvas = document.getElementById('loanChart').getContext('2d');
-    new Chart(loanChartCanvas, {
-        type: 'bar',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-            datasets: [{
-                label: 'Loan Applications',
-                data: [12, 19, 3, 5, 2],
-                backgroundColor: 'blue', // Changed to blue
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
+    // Function to fetch and populate loan application chart
+    function fetchLoanApplicationsChart() {
+        const loanChartCanvas = document.getElementById('loanChart').getContext('2d');
+        fetch('/api/dashboard/loan-applications?period=monthly') // Replace with your actual endpoint and parameters
+            .then(response => response.json())
+            .then(data => {
+                new Chart(loanChartCanvas, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels, // Assuming your backend returns labels (e.g., ['Jan', 'Feb', ...])
+                        datasets: [{
+                            label: 'Loan Applications',
+                            data: data.values, // Assuming your backend returns values ([12, 19, ...])
+                            backgroundColor: 'blue',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching loan applications chart data:', error));
+    }
+
+    // Fetch data on page load
+    fetchDashboardSummary();
+    fetchTransactions();
+    fetchLoanApplicationsChart();
 });
-
-// js/dashboard.js

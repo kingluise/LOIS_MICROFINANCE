@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,10 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profit Analytics</title>
     <link rel="stylesheet" href="css/profit_analytics.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0Hhonpy AIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="js/apiconfig.js" defer></script>
     <script src="js/profit_analytics.js" defer></script>
+    <style>
+        /* Rolling Page Load Animation */
+        @keyframes rollIn {
+            0% { 
+                opacity: 0;
+                transform: translateY(100vh) rotate(30deg);
+            }
+            100% { 
+                opacity: 1;
+                transform: translateY(0) rotate(0);
+            }
+        }
+
+        .rolling-load {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #14213D;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            animation: rollOut 0.6s ease-out forwards;
+            animation-delay: 0.8s;
+        }
+
+        @keyframes rollOut {
+            to {
+                transform: translateY(-100vh) rotate(-15deg);
+                opacity: 0;
+            }
+        }
+
+        .rolling-load-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            border-top-color: #FCA311;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Modern Table Styling */
+       
+
+        @keyframes fadeInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+    </style>
 </head>
 <body>
+
+    <!-- Rolling Load Effect -->
+    <div class="rolling-load">
+        <div class="rolling-load-spinner"></div>
+        <p>Loading...</p>
+    </div>
 
     <div class="sidebar">
         <div class="logo-title">
@@ -89,21 +156,24 @@
                 </div>
             </div>
 
-            <table id="profitAnalysisTable">
-                <thead>
-                    <tr>
-                        <th>Period</th>
-                        <th>Total Disbursement</th>
-                        <th>Total Repayment</th>
-                        <th>Interest Earned</th>
-                        <th>Overdue Loans</th>
-                        <th>Total Overdue Amount</th>
-                        <th>Profit</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div class="table-container">
+                <table id="profitAnalysisTable">
+                    <thead>
+                        <tr>
+                            <th>Period</th>
+                            <th>Total Disbursement</th>
+                            <th>Total Repayment</th>
+                            <th>Interest Earned</th>
+                            <th>Overdue Loans</th>
+                            <th>Total Overdue Amount</th>
+                            <th>Profit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data will be inserted here by JavaScript -->
                     </tbody>
-            </table>
+                </table>
+            </div>
 
             <div id="exportOptions">
                 <label>Export As:</label>
@@ -113,7 +183,16 @@
         </div>
     </div>
 
+    <script>
+        // Add this script to hide the rolling loader when page is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                const rollingLoader = document.querySelector('.rolling-load');
+                if (rollingLoader) {
+                    rollingLoader.style.display = 'none';
+                }
+            }, 1000);
+        });
+    </script>
 </body>
 </html>
-
-

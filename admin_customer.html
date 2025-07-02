@@ -1,19 +1,147 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Customers</title>
-    <link rel="stylesheet" href="css/customer.css">
+    <link rel="stylesheet" href="css/customer.css"> <!-- Corrected stylesheet link -->
+    <script src="js/apiconfig.js" defer></script>
     <script src="js/admin_customer.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        /* Rolling Page Load Animation */
+        @keyframes rollIn {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(30deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) rotate(0);
+            }
+        }
+
+        .rolling-load {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #14213D;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            animation: rollOut 0.6s ease-out forwards;
+            animation-delay: 0.8s;
+        }
+
+        @keyframes rollOut {
+            to {
+                transform: translateY(-100vh) rotate(-15deg);
+                opacity: 0;
+            }
+        }
+
+        .rolling-load-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            border-top-color: #FCA311;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        /* Modern Table Styling */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: white;
+            overflow: hidden;
+            position: relative;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        thead {
+            position: relative;
+        }
+
+        th {
+            background: linear-gradient(135deg, #14213D, #1a2a4f);
+            color: white;
+            font-weight: 600;
+            padding: 18px 20px;
+            text-align: left;
+            border-bottom: none;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        th:first-child {
+            border-top-left-radius: 12px;
+        }
+
+        th:last-child {
+            border-top-right-radius: 12px;
+        }
+
+        tbody tr {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: rgba(249, 249, 249, 0.8);
+        }
+
+        tbody tr:hover {
+            background-color: rgba(252, 163, 17, 0.1);
+            transform: translateX(5px);
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            vertical-align: middle;
+            position: relative;
+        }
+
+        td:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #FCA311;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        tbody tr:hover td:before {
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
 
+    <!-- Rolling Load Effect -->
+    <div class="rolling-load">
+        <div class="rolling-load-spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Custom Alert Container - Will be populated by JavaScript -->
+    <div id="customAlertContainer"></div>
+
     <div class="sidebar">
         <div class="logo-title">
-            <img src="images/LOIS.png" alt="Logo" class="logo">
+            <img src="images/LOIS.png" alt="Logo" class="logo"> <!-- Corrected image path -->
             <h2>Lois Microfinance</h2>
         </div>
         <ul class="menu">
@@ -21,7 +149,7 @@
             <li class="active"><a href="admin_customer.html">👥 Manage Customers</a></li>
             <li><a href="admin_loan.html">💰 Manage Loans</a></li>
             <li><a href="admin_payment.html">💳 Payments</a></li>
-            <li class="active"><a href="admin_notification.html">🔔 Notifications</a></li>
+            <li><a href="admin_notification.html">🔔 Notifications</a></li>
             <li><a href="profit_analytics.html">📊 Profit Analytics</a></li>
             <li><a href="index.html" id="logout">🚪 Logout</a></li>
         </ul>
@@ -30,424 +158,428 @@
     <div class="container">
         <h1>Manage Customers</h1>
 
-        <input type="text" id="searchBar" placeholder="Search customers...">
+        <div class="customer-actions">
+            <button id="addCustomerBtn" class="action-button">+ Add New Customer</button>
+            <input type="text" id="searchBar" placeholder="Search customers..." class="search-input">
+        </div>
 
-        <button id="addCustomerBtn">+ Add New Customer</button>
-
-        <table id="customer-list">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Phone Number</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="customer-list">
-            </tbody>
-        </table>
+        <div class="customer-list-section card">
+            <h3>Customer List</h3>
+            <table id="customer-list">
+                <thead>
+                    <tr>
+                        <th>S/N</th>
+                        <th>Full Name</th>
+                        <th>Phone Number</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="customer-list-body">
+                    <tr><td colspan="4" class="text-center">Loading customers...</td></tr>
+                </tbody>
+            </table>
+            <!-- Pagination Controls -->
+            <div id="customerPagination" class="pagination-controls"></div>
+        </div>
     </div>
 
-    <div id="customerFormContainer" class="hidden">
-        <form id="customerForm">
-            <div class="progress-bar">
-                <div id="progress"></div>
+    <!-- Add Customer Form Modal (Multi-step form) -->
+    <div id="customerFormContainer" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button cancel-form">&times;</span>
+            <h3>Add New Customer</h3>
+            <div class="progress-bar-container">
+                <div class="progress-bar">
+                    <div id="progress" class="progress"></div>
+                </div>
             </div>
+            <form id="customerForm">
+                <!-- Step 1: Personal Information -->
+                <fieldset class="form-step">
+                    <legend>Personal Information</legend>
+                    <div class="form-group">
+                        <label for="fullName">Full Name:</label>
+                        <input type="text" id="fullName" name="fullName" required pattern="[A-Za-z\s]+" title="Please enter a valid name. Only letters and spaces are allowed.">
+                    </div>
+                    <div class="form-group">
+                        <label for="dob">Date of Birth:</label>
+                        <input type="date" id="dob" name="dob" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender:</label>
+                        <select id="gender" name="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="maritalStatus">Marital Status:</label>
+                        <select id="maritalStatus" name="maritalStatus" required>
+                            <option value="">Select Status</option>
+                            <option value="Single">Single</option>
+                            <option value="Married">Married</option>
+                            <option value="Divorced">Divorced</option>
+                            <option value="Widowed">Widowed</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Residential Address:</label>
+                        <input type="text" id="address" name="address" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="next-step submit-button">Next</button>
+                        <button type="button" class="cancel-form cancel-button">Cancel</button>
+                    </div>
+                </fieldset>
 
-            <fieldset class="form-step">
-                <h3>Step 1: Personal Information</h3>
-                <label>Full Name:</label>
-                <input type="text" id="fullName" name="fullName" required pattern="[A-Za-z\s]+" title="Please enter a valid name. Only letters and spaces are allowed.">
+                <!-- Step 2: Contact & Employment Info -->
+                <fieldset class="form-step hidden">
+                    <legend>Contact & Employment Information</legend>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number:</label>
+                        <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number.">
+                    </div>
+                    <div class="form-group">
+                        <label for="employment_status">Employment Status:</label>
+                        <select id="employment_status" name="employment_status" required>
+                            <option value="">Select Status</option>
+                            <option value="Employed">Employed</option>
+                            <option value="Self-Employed">Self-Employed</option>
+                            <option value="Unemployed">Unemployed</option>
+                            <option value="Student">Student</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="income">Monthly Income:</label>
+                        <input type="number" id="income" name="income" required min="0" title="Please enter a valid income.">
+                    </div>
+                    <div class="form-group">
+                        <label for="idType">ID Type:</label>
+                        <select id="idType" name="idType" required>
+                            <option value="">Select ID Type</option>
+                            <option value="NIN">National ID (NIN)</option>
+                            <option value="Passport">International Passport</option>
+                            <option value="DriversLicense">Driver's License</option>
+                            <option value="VotersCard">Voter's Card</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="idNumber">ID Number:</label>
+                        <input type="text" id="idNumber" name="idNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bvn">BVN Number:</label>
+                        <input type="text" id="bvn" name="bvn" required pattern="[0-9]{11}" title="Please enter a valid 11-digit BVN number.">
+                    </div>
+                    <div class="form-group">
+                        <label for="selfie">Upload Selfie:</label>
+                        <input type="file" id="selfie" name="selfie" accept="image/*">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="prev-step cancel-button">Previous</button>
+                        <button type="button" class="next-step submit-button">Next</button>
+                    </div>
+                </fieldset>
 
-                <label>Date of Birth:</label>
-                <input type="date" id="dob" name="dob" required>
+                <!-- Step 3: Guarantor -->
+                <fieldset class="form-step hidden">
+                    <legend>Guarantor Information</legend>
+                    <div class="form-group">
+                        <label for="nextKinName">Full Name (Guarantor):</label>
+                        <input type="text" id="nextKinName" name="nextKinName" required pattern="[A-Za-z\s]+" title="Please enter a valid name. Only letters and spaces are allowed.">
+                    </div>
+                    <div class="form-group">
+                        <label for="nextKinRelation">Relationship to Borrower:</label>
+                        <input type="text" id="nextKinRelation" name="nextKinRelation" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nextKinPhone">Phone Number (Guarantor):</label>
+                        <input type="tel" id="nextKinPhone" name="nextKinPhone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number.">
+                    </div>
+                    <div class="form-group">
+                        <label for="guarantorEmail">Email (Guarantor):</label>
+                        <input type="email" id="guarantorEmail" name="guarantorEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="guarantorIdType">ID Type (Guarantor):</label>
+                        <select id="guarantorIdType" name="guarantorIdType" required>
+                            <option value="">Select ID Type</option>
+                            <option value="NIN">National ID (NIN)</option>
+                            <option value="Passport">International Passport</option>
+                            <option value="DriversLicense">Driver's License</option>
+                            <option value="VotersCard">Voter's Card</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="guarantorIdNumber">ID Number (Guarantor):</label>
+                        <input type="text" id="guarantorIdNumber" name="guarantorIdNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nextKinAddress">Residential Address (Guarantor):</label>
+                        <input type="text" id="nextKinAddress" name="nextKinAddress" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="prev-step cancel-button">Previous</button>
+                        <button type="button" class="next-step submit-button">Next</button>
+                    </div>
+                </fieldset>
 
-                <label>Gender:</label>
-                <select id="gender" name="gender" required>
-                    <option value="" disabled selected>Select your gender</option>
-                    <option>Male</option>
-                    <option>Female</option>
-                </select>
+                <!-- Step 4: Loan Type Selection -->
+                <fieldset class="form-step hidden">
+                    <legend>Loan Preference</legend>
+                    <div class="form-group">
+                        <label for="loanType">Loan Type:</label>
+                        <select id="loanType" name="loanType" required>
+                            <option value="">Select Loan Type</option>
+                            <option value="Weekly">Weekly Loan</option>
+                            <option value="Monthly">Monthly Loan</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="prev-step cancel-button">Previous</button>
+                        <button type="button" class="next-step submit-button">Next</button>
+                    </div>
+                </fieldset>
 
-                <label>Marital Status:</label>
-                <select id="maritalStatus" name="maritalStatus" required>
-                    <option value="" disabled selected>Select your marital status</option>
-                    <option>Single</option>
-                    <option>Married</option>
-                    <option>Others</option>
-                </select>
+                <!-- Step 5: Weekly Loan Details -->
+                <fieldset id="weeklyLoanDetails" class="form-step hidden">
+                    <legend>Weekly Loan Details</legend>
+                    <div class="form-group">
+                        <label for="weeklyAmount">Amount:</label>
+                        <input type="number" id="weeklyAmount" name="weeklyAmount" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="weeklyGroup">Group (Monday to Friday):</label>
+                        <select id="weeklyGroup" name="weeklyGroup">
+                            <option value="">-- Select --</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="weeklyInterestRate">Interest Rate (%):</label>
+                        <input type="number" id="weeklyInterestRate" name="weeklyInterestRate" min="0" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="weeklyDuration">Duration (Weeks):</label>
+                        <input type="number" id="weeklyDuration" name="weeklyDuration" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="weeklyRepaymentDate">First Repayment Date:</label>
+                        <input type="date" id="weeklyRepaymentDate" name="weeklyRepaymentDate">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="prev-step cancel-button">Previous</button>
+                        <button type="submit" class="submit-button">Submit Weekly Loan Application</button>
+                    </div>
+                </fieldset>
 
-                <label>Residential Address:</label>
-                <input type="text" id="address" name="address" required>
-
-                <button type="button" class="next-step">Next</button>
-            </fieldset>
-
-            <fieldset class="form-step hidden">
-                <h3>Step 2: Employment & ID</h3>
-                <label>Email:</label>
-                <input type="email" id="email" name="email" required>
-
-                <label>Phone Number:</label>
-                <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number.">
-
-                <label>Employment Status:</label>
-                <select id="employment_status" name="employment_status" required>
-                    <option value="" disabled selected>Select your employment status</option>
-                    <option>Employed</option>
-                    <option>Self-Employed</option>
-                    <option>Unemployed</option>
-                </select>
-
-                <label>Monthly Income:</label>
-                <input type="number" id="income" name="income" required min="0" title="Please enter a valid income.">
-
-                <label>ID Type:</label>
-                <select id="idType" name="idType" required>
-                    <option value="" disabled selected>Select ID type</option>
-                    <option>Passport</option>
-                    <option>NIN</option>
-                    <option>Voter’s Card</option>
-                    <option>Driver’s License</option>
-                </select>
-
-                <label>ID Number:</label>
-                <input type="text" id="idNumber" name="idNumber" required>
-
-                <label>Upload ID:</label>
-                <input type="file" id="idUpload" name="idUpload" accept=".jpg,.png,.pdf" required>
-
-                <label>BVN Number:</label>
-                <input type="text" id="bvn" name="bvn" required pattern="[0-9]{11}" title="Please enter a valid 11-digit BVN number.">
-
-                <label>Upload Passport Photograph:</label>
-                <input type="file" id="passportUpload" name="passportUpload" accept=".jpg,.png" required>
-
-                <button type="button" class="prev-step">Previous</button>
-                <button type="button" class="next-step">Next</button>
-            </fieldset>
-
-            <fieldset class="form-step hidden">
-                <h3>Step 3: Guarantor</h3>
-                <label>Guarantor Name:</label>
-                <input type="text" id="nextKinName" name="nextKinName" required pattern="[A-Za-z\s]+" title="Please enter a valid name. Only letters and spaces are allowed.">
-
-                <label>Guarantor Relationship:</label>
-                <input type="text" id="nextKinRelation" name="nextKinRelation" required>
-
-                <label>Guarantor Phone Number:</label>
-                <input type="tel" id="nextKinPhone" name="nextKinPhone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number.">
-
-                <label>Guarantor Email:</label>
-                <input type="email" id="guarantorEmail" name="guarantorEmail" required>
-
-                <label>ID Type:</label>
-                <select id="guarantorIdType" name="guarantorIdType" required>
-                    <option value="" disabled selected>Select ID type</option>
-                    <option>Passport</option>
-                    <option>NIN</option>
-                    <option>Voter’s Card</option>
-                    <option>Driver’s License</option>
-                </select>
-
-                <label>ID Number:</label>
-                <input type="text" id="guarantorIdNumber" name="guarantorIdNumber" required>
-
-                <label>Upload ID:</label>
-                <input type="file" id="guarantorIdUpload" name="guarantorIdUpload" accept=".jpg,.png,.pdf" required>
-
-                <button type="button" class="prev-step">Previous</button>
-                <button type="submit">Submit</button>
-            </fieldset>
-        </form>
-    </div>
-
-    <div id="editModal" style="display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
-        <div style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%;">
-            <span id="closeModal" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
-            <h2>Edit Customer</h2>
-            <form id="editForm">
-                <label for="editFullName">Full Name:</label><br>
-                <input type="text" id="editFullName" placeholder="Full Name" required pattern="[A-Za-z\s]+" title="Please enter a valid name. Only letters and spaces are allowed."><br><br>
-
-                <label for="editPhone">Phone:</label><br>
-                <input type="tel" id="editPhone" placeholder="Phone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number."><br><br>
-
-                <label for="editEmail">Email:</label><br>
-                <input type="email" id="editEmail" placeholder="Email" required><br><br>
-
-                <label for="editDob">Date of Birth:</label><br>
-                <input type="date" id="editDob" placeholder="Date of Birth" required><br><br>
-
-                <label for="editGender">Gender:</label><br>
-                <input type="text" id="editGender" placeholder="Gender" required><br><br>
-
-                <label for="editMaritalStatus">Marital Status:</label><br>
-                <input type="text" id="editMaritalStatus" placeholder="Marital Status" required><br><br>
-
-                <label for="editEmployment_status">Employment Status:</label><br>
-                <input type="text" id="editEmployment_status" placeholder="Employment Status" required><br><br>
-
-                <label for="editIncome">Income:</label><br>
-                <input type="number" id="editIncome" placeholder="Income" required min="0" title="Please enter a valid income."><br><br>
-
-                <label for="editIdType">ID Type:</label><br>
-                <input type="text" id="editIdType" placeholder="ID Type" required><br><br>
-
-                <label for="editIdNumber">ID Number:</label><br>
-                <input type="text" id="editIdNumber" placeholder="ID Number" required><br><br>
-
-                <label for="editGuarantorFullName">Guarantor Name:</label><br>
-                <input type="text" id="editGuarantorFullName" placeholder="Guarantor fullName" required pattern="[A-Za-z\s]+" title="Please enter a valid name. Only letters and spaces are allowed."><br><br>
-
-                <label for="editRelationshipToBorrower">Relationship To Borrower:</label><br>
-                <input type="text" id="editRelationshipToBorrower" placeholder="Relationship To Borrower" required><br><br>
-
-                <label for="editResidentialAddress">Residential Address:</label><br>
-                <input type="text" id="editResidentialAddress" placeholder="Residential Address" required><br><br>
-
-                <label for="editPhone">Phone Number:</label><br>
-                <input type="tel" id="editPhone" placeholder="Phone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number."><br><br>
-
-                <label for="editEmail">Email:</label><br>
-                <input type="email" id="editEmail" placeholder="Email" required><br><br>
-
-                <label for="editIdType">ID Type:</label><br>
-                <input type="text" id="editIdType" placeholder="ID Type" required><br><br>
-
-                <label for="editIdNumber">ID Number:</label><br>
-                <input type="text" id="editIdNumber" placeholder="ID Number" required><br><br>
-
-                <button type="submit">Save Changes</button>
+                <!-- Step 6: Monthly Loan Details -->
+                <fieldset id="monthlyLoanDetails" class="form-step hidden">
+                    <legend>Monthly Loan Details</legend>
+                    <div class="form-group">
+                        <label for="monthlyAmount">Amount:</label>
+                        <input type="number" id="monthlyAmount" name="monthlyAmount" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="monthlyInterestRate">Interest Rate (%):</label>
+                        <input type="number" id="monthlyInterestRate" name="monthlyInterestRate" min="0" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="monthlyDuration">Duration (Months 1-6):</label>
+                        <input type="number" id="monthlyDuration" name="monthlyDuration" min="1" max="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="monthlyRepaymentDate">First Repayment Date:</label>
+                        <input type="date" id="monthlyRepaymentDate" name="monthlyRepaymentDate">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="prev-step cancel-button">Previous</button>
+                        <button type="submit" class="submit-button">Submit Monthly Loan Application</button>
+                    </div>
+                </fieldset>
             </form>
         </div>
     </div>
-</body>
-</html>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Customers</title>
-    <link rel="stylesheet" href="css/customer.css">
-    <script src="js/admin_customer.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-</head>
-<body>
-
-    <div class="sidebar">
-        <div class="logo-title">
-            <img src="image/loism.png" alt="Logo" class="logo">
-            <h2>Lois Microfinance</h2>
-        </div>
-        <ul class="menu">
-            <li><a href="admin_dashboard.html">🏠 Home</a></li>
-            <li class="active"><a href="admin_customer.html">👥 Manage Customers</a></li>
-            <li><a href="admin_loan.html">💰 Manage Loans</a></li>
-            <li><a href="admin_payment.html">💳 Payments</a></li>
-            <li class="active"><a href="admin_notification.html">🔔 Notifications</a></li>
-            <li><a href="profit_analytics.html">📊 Profit Analytics</a></li>
-            <li><a href="index.html" id="logout">🚪 Logout</a></li>
-        </ul>
-    </div>
-
-    <div class="container">
-        <h1>Manage Customers</h1>
-
-        <input type="text" id="searchBar" placeholder="Search customers...">
-
-        <button id="addCustomerBtn">+ Add New Customer</button>
-
-        <table id="customer-list">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Phone Number</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="customer-list">
-            </tbody>
-        </table>
-    </div>
-
-    <div id="customerFormContainer" class="hidden">
-        <form id="customerForm">
-            <div class="progress-bar">
-                <div id="progress"></div>
-            </div>
-
-            <fieldset class="form-step">
-                <h3>Step 1: Personal Information</h3>
-                <label>Full Name:</label>
-                <input type="text" id="fullName" name="fullName" required pattern="[A-Za-z\s]+" title="Please enter a valid name. Only letters and spaces are allowed.">
-
-                <label>Date of Birth:</label>
-                <input type="date" id="dob" name="dob" required>
-
-                <label>Gender:</label>
-                <select id="gender" name="gender" required>
-                    <option value="" disabled selected>Select your gender</option>
-                    <option>Male</option>
-                    <option>Female</option>
-                </select>
-
-                <label>Marital Status:</label>
-                <select id="maritalStatus" name="maritalStatus" required>
-                    <option value="" disabled selected>Select your marital status</option>
-                    <option>Single</option>
-                    <option>Married</option>
-                    <option>Others</option>
-                </select>
-
-                <label>Residential Address:</label>
-                <input type="text" id="address" name="address" required>
-
-                <button type="button" class="next-step">Next</button>
-            </fieldset>
-
-            <fieldset class="form-step hidden">
-                <h3>Step 2: Employment & ID</h3>
-                <label>Email:</label>
-                <input type="email" id="email" name="email" required>
-
-                <label>Phone Number:</label>
-                <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number.">
-
-                <label>Employment Status:</label>
-                <select id="employment_status" name="employment_status" required>
-                    <option value="" disabled selected>Select your employment status</option>
-                    <option>Employed</option>
-                    <option>Self-Employed</option>
-                    <option>Unemployed</option>
-                </select>
-
-                <label>Monthly Income:</label>
-                <input type="number" id="income" name="income" required min="0" title="Please enter a valid income.">
-
-                <label>ID Type:</label>
-                <select id="idType" name="idType" required>
-                    <option value="" disabled selected>Select ID type</option>
-                    <option>Passport</option>
-                    <option>NIN</option>
-                    <option>Voter’s Card</option>
-                    <option>Driver’s License</option>
-                </select>
-
-                <label>ID Number:</label>
-                <input type="text" id="idNumber" name="idNumber" required>
-
-                <label>Upload ID:</label>
-                <input type="file" id="idUpload" name="idUpload" accept=".jpg,.png,.pdf" required>
-
-                <label>BVN Number:</label>
-                <input type="text" id="bvn" name="bvn" required pattern="[0-9]{11}" title="Please enter a valid 11-digit BVN number.">
-
-                <label>Upload Passport Photograph:</label>
-                <input type="file" id="passportUpload" name="passportUpload" accept=".jpg,.png" required>
-
-                <button type="button" class="prev-step">Previous</button>
-                <button type="button" class="next-step">Next</button>
-            </fieldset>
-
-            <fieldset class="form-step hidden">
-                <h3>Step 3: Guarantor</h3>
-                <label>Guarantor Name:</label>
-                <input type="text" id="nextKinName" name="nextKinName" required pattern="[A-Za-z\s]+" title="Please enter a valid name. Only letters and spaces are allowed.">
-
-                <label>Guarantor Relationship:</label>
-                <input type="text" id="nextKinRelation" name="nextKinRelation" required>
-
-                <label>Guarantor Phone Number:</label>
-                <input type="tel" id="nextKinPhone" name="nextKinPhone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number.">
-
-                <label>Guarantor Email:</label>
-                <input type="email" id="guarantorEmail" name="guarantorEmail" required>
-
-                <label>ID Type:</label>
-                <select id="guarantorIdType" name="guarantorIdType" required>
-                    <option value="" disabled selected>Select ID type</option>
-                    <option>Passport</option>
-                    <option>NIN</option>
-                    <option>Voter’s Card</option>
-                    <option>Driver’s License</option>
-                </select>
-
-                <label>ID Number:</label>
-                <input type="text" id="guarantorIdNumber" name="guarantorIdNumber" required>
-
-                <label>Upload ID:</label>
-                <input type="file" id="guarantorIdUpload" name="guarantorIdUpload" accept=".jpg,.png,.pdf" required>
-
-                <button type="button" class="prev-step">Previous</button>
-                <button type="submit">Submit</button>
-            </fieldset>
-        </form>
-    </div>
-
-    <div id="editModal" style="display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4);">
-        <div style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%;">
-            <span id="closeModal" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
-            <h2>Edit Customer</h2>
+    <!-- Edit Customer Modal -->
+    <div id="editModal" class="modal hidden">
+        <div class="modal-content card">
+            <span class="close-button" id="closeModal">&times;</span>
+            <h3>Edit Customer</h3>
             <form id="editForm">
-                <label for="editFullName">Full Name:</label><br>
-                <input type="text" id="editFullName" placeholder="Full Name" required pattern="[A-Za-z\s]+" title="Please enter a valid name. Only letters and spaces are allowed."><br><br>
+                <h4>Personal Information</h4>
+                <div class="form-group">
+                    <label for="editFullName">Full Name:</label>
+                    <input type="text" id="editFullName" name="fullName" required pattern="[A-Za-z\s]+" title="Please enter a valid name. Only letters and spaces are allowed.">
+                </div>
+                <div class="form-group">
+                    <label for="editDob">Date of Birth:</label>
+                    <input type="date" id="editDob" name="dob" required>
+                </div>
+                <div class="form-group">
+                    <label for="editGender">Gender:</label>
+                    <select id="editGender" name="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editMaritalStatus">Marital Status:</label>
+                    <select id="editMaritalStatus" name="maritalStatus" required>
+                        <option value="">Select Status</option>
+                        <option value="Single">Single</option>
+                        <option value="Married">Married</option>
+                        <option value="Divorced">Divorced</option>
+                        <option value="Widowed">Widowed</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editResidentialAddress">Residential Address:</label>
+                    <input type="text" id="editResidentialAddress" name="address" required>
+                </div>
 
-                <label for="editPhone">Phone:</label><br>
-                <input type="tel" id="editPhone" placeholder="Phone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number."><br><br>
+                <h4>Contact & Employment Information</h4>
+                <div class="form-group">
+                    <label for="editEmail">Email:</label>
+                    <input type="email" id="editEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="editPhone">Phone Number:</label>
+                    <input type="tel" id="editPhone" name="phone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number.">
+                </div>
+                <div class="form-group">
+                    <label for="editEmployment_status">Employment Status:</label>
+                    <select id="editEmployment_status" name="employment_status" required>
+                        <option value="">Select Status</option>
+                        <option value="Employed">Employed</option>
+                        <option value="Self-Employed">Self-Employed</option>
+                        <option value="Unemployed">Unemployed</option>
+                        <option value="Student">Student</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editIncome">Monthly Income:</label>
+                    <input type="number" id="editIncome" name="income" required min="0" title="Please enter a valid income.">
+                </div>
+                <div class="form-group">
+                    <label for="editIdType">ID Type:</label>
+                    <select id="editIdType" name="idType" required>
+                        <option value="">Select ID Type</option>
+                        <option value="NIN">National ID (NIN)</option>
+                        <option value="Passport">International Passport</option>
+                        <option value="DriversLicense">Driver's License</option>
+                        <option value="VotersCard">Voter's Card</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editIdNumber">ID Number:</label>
+                    <input type="text" id="editIdNumber" name="idNumber" required>
+                </div>
+                <div class="form-group">
+                    <label for="editBvn">BVN Number:</label>
+                    <input type="text" id="editBvn" name="bvn" required pattern="[0-9]{11}" title="Please enter a valid 11-digit BVN number.">
+                </div>
+                <!-- Removed selfie upload from edit modal for simplicity, as it's usually a separate process -->
+                <!-- <div class="form-group">
+                    <label for="editSelfie">Upload New Selfie:</label>
+                    <input type="file" id="editSelfie" name="selfie" accept="image/*">
+                </div> -->
 
-                <label for="editEmail">Email:</label><br>
-                <input type="email" id="editEmail" placeholder="Email" required><br><br>
+                <h4>Guarantor Information</h4>
+                <div class="form-group">
+                    <label for="editGuarantorFullName">Full Name (Guarantor):</label>
+                    <input type="text" id="editGuarantorFullName" name="guarantorFullName" required pattern="[A-Za-z\s]+" title="Please enter a valid name. Only letters and spaces are allowed.">
+                </div>
+                <div class="form-group">
+                    <label for="editRelationshipToBorrower">Relationship to Borrower:</label>
+                    <input type="text" id="editRelationshipToBorrower" name="relationshipToBorrower" required>
+                </div>
+                <div class="form-group">
+                    <label for="editGuarantorPhone">Phone Number (Guarantor):</label>
+                    <input type="tel" id="editGuarantorPhone" name="guarantorPhone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number.">
+                </div>
+                <div class="form-group">
+                    <label for="editGuarantorEmail">Email (Guarantor):</label>
+                    <input type="email" id="editGuarantorEmail" name="guarantorEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="editGuarantorIdType">ID Type (Guarantor):</label>
+                    <select id="editGuarantorIdType" name="guarantorIdType" required>
+                        <option value="">Select ID Type</option>
+                        <option value="NIN">National ID (NIN)</option>
+                        <option value="Passport">International Passport</option>
+                        <option value="DriversLicense">Driver's License</option>
+                        <option value="VotersCard">Voter's Card</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editGuarantorIdNumber">ID Number (Guarantor):</label>
+                    <input type="text" id="editGuarantorIdNumber" name="guarantorIdNumber" required>
+                </div>
+                <div class="form-group">
+                    <label for="editGuarantorResidentialAddress">Residential Address (Guarantor):</label>
+                    <input type="text" id="editGuarantorResidentialAddress" name="guarantorResidentialAddress" required>
+                </div>
 
-                <label for="editDob">Date of Birth:</label><br>
-                <input type="date" id="editDob" placeholder="Date of Birth" required><br><br>
-
-                <label for="editGender">Gender:</label><br>
-                <input type="text" id="editGender" placeholder="Gender" required><br><br>
-
-                <label for="editMaritalStatus">Marital Status:</label><br>
-                <input type="text" id="editMaritalStatus" placeholder="Marital Status" required><br><br>
-
-                <label for="editEmployment_status">Employment Status:</label><br>
-                <input type="text" id="editEmployment_status" placeholder="Employment Status" required><br><br>
-
-                <label for="editIncome">Income:</label><br>
-                <input type="number" id="editIncome" placeholder="Income" required min="0" title="Please enter a valid income."><br><br>
-
-                <label for="editIdType">ID Type:</label><br>
-                <input type="text" id="editIdType" placeholder="ID Type" required><br><br>
-
-                <label for="editIdNumber">ID Number:</label><br>
-                <input type="text" id="editIdNumber" placeholder="ID Number" required><br><br>
-
-                <label for="editGuarantorFullName">Guarantor Name:</label><br>
-                <input type="text" id="editGuarantorFullName" placeholder="Guarantor fullName" required pattern="[A-Za-z\s]+" title="Please enter a valid name. Only letters and spaces are allowed."><br><br>
-
-                <label for="editRelationshipToBorrower">Relationship To Borrower:</label><br>
-                <input type="text" id="editRelationshipToBorrower" placeholder="Relationship To Borrower" required><br><br>
-
-                <label for="editResidentialAddress">Residential Address:</label><br>
-                <input type="text" id="editResidentialAddress" placeholder="Residential Address" required><br><br>
-
-                <label for="editPhone">Phone Number:</label><br>
-                <input type="tel" id="editPhone" placeholder="Phone" required pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number."><br><br>
-
-                <label for="editEmail">Email:</label><br>
-                <input type="email" id="editEmail" placeholder="Email" required><br><br>
-
-                <label for="editIdType">ID Type:</label><br>
-                <input type="text" id="editIdType" placeholder="ID Type" required><br><br>
-
-                <label for="editIdNumber">ID Number:</label><br>
-                <input type="text" id="editIdNumber" placeholder="ID Number" required><br><br>
-
-                <button type="submit">Save Changes</button>
+                <div class="form-actions">
+                    <button type="submit" class="submit-button">Save Changes</button>
+                    <button type="button" class="cancel-button" id="cancelEditBtn">Cancel</button>
+                </div>
             </form>
         </div>
     </div>
+
+    <!-- View Customer Modal -->
+    <div id="viewCustomerModal" class="modal hidden">
+        <div class="modal-content card">
+            <span class="close-button" id="closeViewCustomerModal">&times;</span>
+            <h3>Customer Details</h3>
+            <div class="details-section">
+                <h4>Personal Information</h4>
+                <p><strong>Full Name:</strong> <span id="viewFullName"></span></p>
+                <p><strong>Date of Birth:</strong> <span id="viewDob"></span></p>
+                <p><strong>Gender:</strong> <span id="viewGender"></span></p>
+                <p><strong>Marital Status:</strong> <span id="viewMaritalStatus"></span></p>
+                <p><strong>Residential Address:</strong> <span id="viewResidentialAddress"></span></p>
+            </div>
+            <div class="details-section">
+                <h4>Contact & Employment Information</h4>
+                <p><strong>Email:</strong> <span id="viewEmail"></span></p>
+                <p><strong>Phone Number:</strong> <span id="viewPhone"></span></p>
+                <p><strong>Employment Status:</strong> <span id="viewEmploymentStatus"></span></p>
+                <p><strong>Monthly Income:</strong> <span id="viewIncome"></span></p>
+                <p><strong>ID Type:</strong> <span id="viewIdType"></span></p>
+                <p><strong>ID Number:</strong> <span id="viewIdNumber"></span></p>
+                <p><strong>BVN:</strong> <span id="viewBvn"></span></p>
+                <!-- <p><strong>Selfie:</strong> <img id="viewSelfie" src="" alt="Customer Selfie" style="max-width: 100px; max-height: 100px;"></p> -->
+            </div>
+            <div class="details-section">
+                <h4>Guarantor Information</h4>
+                <p><strong>Full Name:</strong> <span id="viewGuarantorFullName"></span></p>
+                <p><strong>Relationship to Borrower:</strong> <span id="viewRelationshipToBorrower"></span></p>
+                <p><strong>Phone Number:</strong> <span id="viewGuarantorPhone"></span></p>
+                <p><strong>Email:</strong> <span id="viewGuarantorEmail"></span></p>
+                <p><strong>ID Type:</strong> <span id="viewGuarantorIdType"></span></p>
+                <p><strong>ID Number:</strong> <span id="viewGuarantorIdNumber"></span></p>
+                <p><strong>Residential Address:</strong> <span id="viewGuarantorResidentialAddress"></span></p>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="cancel-button" id="closeViewCustomerModal">Close</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
-
