@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchBar = document.getElementById('searchBar');
     const customerPaginationContainer = document.getElementById('customerPagination');
 
-    // --- NEW: Loading Overlay Element ---
+    // --- Loading Overlay Element ---
     const loadingOverlay = document.getElementById('loadingOverlay');
 
     // --- Global Variables for Pagination and Search ---
@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return response.json();
     }
 
-    // --- NEW: Loading Overlay Functions ---
+    // --- Loading Overlay Functions ---
     function showLoadingOverlay() {
         if (loadingOverlay) {
             loadingOverlay.classList.add('visible');
@@ -370,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Pagination Functions (Re-added) ---
+    // --- Pagination Functions ---
     function displayCustomerPagination(totalRecords, page) {
         const totalPages = Math.ceil(totalRecords / customerPageSize);
         if (!customerPaginationContainer) {
@@ -455,7 +455,6 @@ document.addEventListener('DOMContentLoaded', () => {
             customerPaginationContainer.innerHTML = '';
         }
     }
-
 
     // --- Event listener for table actions (View, Edit, Delete) ---
     customerListTableBody.addEventListener('click', async (e) => {
@@ -686,11 +685,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Displays customer details in a view modal (assuming you have one).
-     * @param {Object} customer - The customer data object.
+     * Displays customer details in the view modal
+     * @param {Object} customer - The customer data object
      */
     function viewCustomer(customer) {
-        const viewModal = document.getElementById('viewCustomerModal'); // Assuming this ID for your view modal
+        const viewModal = document.getElementById('viewCustomerModal');
 
         if (!viewModal) {
             console.error('View customer modal not found.');
@@ -698,58 +697,72 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Populate view modal fields (adjust IDs to your actual view modal HTML)
+        // Format date if it exists
+        const formatDate = (dateString) => {
+            if (!dateString) return 'N/A';
+            try {
+                return new Date(dateString).toLocaleDateString();
+            } catch (e) {
+                return dateString.split('T')[0];
+            }
+        };
+
+        // Format currency if it exists
+        const formatCurrency = (amount) => {
+            if (!amount) return 'N/A';
+            return amount.toLocaleString('en-NG', {
+                style: 'currency',
+                currency: 'NGN',
+                minimumFractionDigits: 2
+            });
+        };
+
+        // Populate view modal fields
         document.getElementById('viewFullName').textContent = customer.fullName || 'N/A';
         document.getElementById('viewPhone').textContent = customer.phonenumber || 'N/A';
         document.getElementById('viewEmail').textContent = customer.email || 'N/A';
-        document.getElementById('viewDob').textContent = customer.dateOfBirth ?
-            new Date(customer.dateOfBirth).toLocaleDateString() : 'N/A';
+        document.getElementById('viewDob').textContent = formatDate(customer.dateOfBirth);
         document.getElementById('viewGender').textContent = customer.gender || 'N/A';
-        document.getElementById('viewMaritalStatus').textContent =
-            customer.maritalStatus || 'N/A';
-        document.getElementById('viewEmploymentStatus').textContent =
-            customer.employmentStatus || 'N/A';
-        document.getElementById('viewIncome').textContent =
-            customer.monthlyIncome ? customer.monthlyIncome.toLocaleString('en-NG', { style: 'currency', currency: 'NGN' }) : 'N/A';
-        document.getElementById('viewIdType').textContent =
-            customer.identification?.identificationType || 'N/A';
-        document.getElementById('viewIdNumber').textContent =
-            customer.identification?.identificationNumber || 'N/A';
-        document.getElementById('viewBvn').textContent = customer.bvn || 'N/A'; // Assuming BVN is a top-level field for customer
-        document.getElementById('viewResidentialAddress').textContent =
-            customer.residentialAddress || 'N/A';
+        document.getElementById('viewMaritalStatus').textContent = customer.maritalStatus || 'N/A';
+        document.getElementById('viewEmploymentStatus').textContent = customer.employmentStatus || 'N/A';
+        document.getElementById('viewIncome').textContent = formatCurrency(customer.monthlyIncome);
+        document.getElementById('viewIdType').textContent = customer.identification?.identificationType || 'N/A';
+        document.getElementById('viewIdNumber').textContent = customer.identification?.identificationNumber || 'N/A';
+        document.getElementById('viewBvn').textContent = customer.bvn || 'N/A';
+        document.getElementById('viewResidentialAddress').textContent = customer.residentialAddress || 'N/A';
 
         // Guarantor details
-        document.getElementById('viewGuarantorFullName').textContent =
-            customer.guarantor?.fullName || 'N/A';
-        document.getElementById('viewRelationshipToBorrower').textContent =
-            customer.guarantor?.relationshipToCustomer || 'N/A';
-        document.getElementById('viewGuarantorPhone').textContent =
-            customer.guarantor?.phoneNumber || 'N/A';
-        document.getElementById('viewGuarantorEmail').textContent =
-            customer.guarantor?.emailAddress || 'N/A';
-        document.getElementById('viewGuarantorIdType').textContent =
-            customer.guarantor?.identificationType || 'N/A';
-        document.getElementById('viewGuarantorIdNumber').textContent =
-            customer.guarantor?.identificationNumber || 'N/A';
-        document.getElementById('viewGuarantorResidentialAddress').textContent =
-            customer.guarantor?.residentialAddress || 'N/A'; // Assuming you have this field for guarantor
+        document.getElementById('viewGuarantorFullName').textContent = customer.guarantor?.fullName || 'N/A';
+        document.getElementById('viewRelationshipToBorrower').textContent = customer.guarantor?.relationshipToCustomer || 'N/A';
+        document.getElementById('viewGuarantorPhone').textContent = customer.guarantor?.phoneNumber || 'N/A';
+        document.getElementById('viewGuarantorEmail').textContent = customer.guarantor?.emailAddress || 'N/A';
+        document.getElementById('viewGuarantorIdType').textContent = customer.guarantor?.identificationType || 'N/A';
+        document.getElementById('viewGuarantorIdNumber').textContent = customer.guarantor?.identificationNumber || 'N/A';
+        document.getElementById('viewGuarantorResidentialAddress').textContent = customer.guarantor?.residentialAddress || 'N/A';
 
-        viewModal.style.display = 'block'; // Show the modal
+        // Show the modal
+        viewModal.classList.add('visible');
 
-        // Close button for view modal
+        // Close button handlers
         const closeViewModal = document.getElementById('closeViewCustomerModal');
+        const closeViewModalBtn = document.getElementById('closeViewCustomerModalBtn');
 
         if (closeViewModal) {
             closeViewModal.onclick = () => {
-                viewModal.style.display = 'none';
+                viewModal.classList.remove('visible');
+            };
+        }
+
+        if (closeViewModalBtn) {
+            closeViewModalBtn.onclick = () => {
+                viewModal.classList.remove('visible');
             };
         }
 
         // Close if click outside modal
         window.onclick = (event) => {
             if (event.target === viewModal) {
-                viewModal.style.display = 'none';
+                viewModal.classList.remove('visible');
             }
         };
     }
@@ -823,7 +836,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         repaymentDate: document.getElementById('monthlyRepaymentDate').value,
                     };
                 }
-
 
                 // Prepare the customer payload matching the API Swagger definition
                 const customerPayload = {

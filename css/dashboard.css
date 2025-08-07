@@ -190,6 +190,7 @@ body {
     height: auto !important;
 }
 
+
 /* Transactions Section */
 .transactions {
     margin-top: 30px;
@@ -260,6 +261,8 @@ body {
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+
+
 /* Responsive Design */
 @media (max-width: 1024px) {
     .dashboard-cards {
@@ -290,3 +293,12 @@ body {
         width: 150px;
     }
 }
+
+.typing::after {
+    content: '|';
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }

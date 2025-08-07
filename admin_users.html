@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profit Analytics</title>
-    <link rel="stylesheet" href="css/profit_analytics.css">
+    <title>User Management</title> <!-- UPDATED TITLE -->
+    <link rel="stylesheet" href="css/admin_users.css"> <!-- Reusing CSS for general styling -->
     <script src="js/apiconfig.js" defer></script>
-    <script src="js/profit_analytics.js" defer></script>
+    <script src="js/admin_users.js" defer></script>
     <style>
         /* Rolling Page Load Animation */
         @keyframes rollIn {
@@ -56,16 +56,6 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-
-        /* Modern Table Styling */
-        /* (Your existing table styling from profit_analytics.css will apply here) */
-
-        @keyframes fadeInUp {
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
         }
 
         /* Basic styling for loading indicator */
@@ -119,102 +109,63 @@
             <li><a href="admin_loan.html">💰 Manage Loans</a></li>
             <li><a href="admin_payment.html">💳 Payments</a></li>
             <li><a href="admin_notification.html">🔔 Notifications</a></li>
-            <li class="active"><a href="admin_profit_analysis.html">📊 Profit Analytics</a></li>
+            <li><a href="admin_profit_analysis.html">📊 Profit Analytics</a></li>
+            <li class="active"><a href="admin_users.html">👤 User Management</a></li> <!-- NEW LINK, SET ACTIVE -->
             <li><a href="index.html" id="logout">🚪 Logout</a></li>
         </ul>
     </div>
 
     <div class="container">
-        <div id="profitAnalysis">
-            <h2><i class="fas fa-chart-line"></i> Profit Analytics</h2>
+        <div id="userManagementSection"> <!-- UPDATED ID -->
+            <h2><i class="fas fa-users"></i> User Management</h2> <!-- UPDATED HEADING -->
 
-            <div id="profitAnalysisControls">
-                <label for="filterPeriod">Filter By:</label>
-                <select id="filterPeriod">
-                    <option value="monthly">Monthly</option>
-                    <option value="quarterly">Quarterly</option>
-                    <option value="yearly">Yearly</option>
-                    <option value="custom">Custom Range</option>
-                </select>
-
-                <!-- REMOVED inline style="display: none;" -->
-                <div id="monthYearSelector">
-                    <label for="month">Month:</label>
-                    <select id="month">
-                        <option value="01">January</option>
-                        <option value="02">February</option>
-                        <option value="03">March</option>
-                        <option value="04">April</option>
-                        <option value="05">May</option>
-                        <option value="06">June</option>
-                        <option value="07">July</option>
-                        <option value="08">August</option>
-                        <option value="09">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
-                    </select>
-                    <!-- CORRECTED ID: Changed from 'monthlyYearInput' to 'year' -->
-                    <label for="year">Year:</label>
-                    <input type="number" id="year" placeholder="YYYY">
-                    <button id="applyMonthYearFilter">Apply</button>
-                </div>
-
-                <!-- REMOVED inline style="display: none;" -->
-                <div id="quarterYearSelector">
-                    <label for="quarter">Quarter:</label>
-                    <select id="quarter">
-                        <option value="1">Q1</option>
-                        <option value="2">Q2</option>
-                        <option value="3">Q3</option>
-                        <option value="4">Q4</option>
-                    </select>
-                    <label for="yearQuarter">Year:</label>
-                    <input type="number" id="yearQuarter" placeholder="YYYY">
-                    <button id="applyQuarterYearFilter">Apply</button>
-                </div>
-
-                <!-- REMOVED inline style="display: none;" -->
-                <div id="yearOnlySelector">
-                    <label for="onlyYear">Year:</label>
-                    <input type="number" id="onlyYear" placeholder="YYYY">
-                    <button id="applyYearFilter">Apply</button>
-                </div>
-
-                <!-- REMOVED inline style="display: none;" -->
-                <div id="customRangeSelector">
-                    <label for="startDate">Start Date:</label>
-                    <input type="date" id="startDate">
-                    <label for="endDate">End Date:</label>
-                    <input type="date" id="endDate">
-                    <button id="applyCustomRangeFilter">Apply</button>
-                </div>
+            <!-- Content for User Management will go here -->
+            <!-- Example: A table to list users, buttons to add new users, etc. -->
+            <div class="user-controls">
+                <button id="addAdminUserBtn">Add Admin User</button>
+                <button id="addOperatorUserBtn">Add Operator User</button>
             </div>
 
+            <h3>Admin Users</h3>
             <div class="table-container">
-                <table id="profitAnalysisTable">
+                <table id="adminUserTable">
                     <thead>
                         <tr>
-                            <th>Period</th>
-                            <th>Total Disbursement</th>
-                            <th>Total Repayment</th>
-                            <th>Interest Earned</th>
-                            <th>Overdue Loans</th>
-                            <th>Total Overdue Amount</th>
-                            <th>Profit</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Phone Number</th>
+                            <th>Status</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <!-- Data will be inserted here by JavaScript -->
+                    <tbody id="adminUserTableBody">
+                        <!-- Admin user data will be inserted here by JavaScript -->
                     </tbody>
                 </table>
             </div>
 
-            <div id="exportOptions">
-                <label>Export As:</label>
-                <button id="exportPdfBtn"><i class="fas fa-file-pdf"></i> PDF</button>
-                <button id="exportXmlBtn"><i class="fas fa-file-code"></i> XML</button>
+            <h3>Operator Users</h3>
+            <div class="table-container">
+                <table id="operatorUserTable">
+                    <thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Phone Number</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="operatorUserTableBody">
+                        <!-- Operator user data will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
             </div>
+
+            <!-- Add forms or modals for adding/editing users here later -->
+
         </div>
     </div>
 

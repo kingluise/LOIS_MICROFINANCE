@@ -126,6 +126,72 @@
         tbody tr:hover td:before {
             opacity: 1;
         }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .modal.visible {
+            display: block;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 900px;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+            transform: translateY(-20px);
+        }
+
+        .modal.visible .modal-content {
+            transform: translateY(0);
+        }
+
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-button:hover {
+            color: black;
+        }
+
+        /* Customer details styling */
+        .details-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .details-section h4 {
+            margin-top: 0;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+
+        .details-section p {
+            margin: 8px 0;
+        }
     </style>
 </head>
 <body>
@@ -150,6 +216,7 @@
             <li><a href="admin_loan.html">💰 Manage Loans</a></li>
             <li><a href="admin_payment.html">💳 Payments</a></li>
             <li><a href="admin_notification.html">🔔 Notifications</a></li>
+            <li><a href="admin_users.html">👤 User Management</a></li>
             <li><a href="profit_analytics.html">📊 Profit Analytics</a></li>
             <li><a href="index.html" id="logout">🚪 Logout</a></li>
         </ul>
@@ -491,11 +558,6 @@
                     <label for="editBvn">BVN Number:</label>
                     <input type="text" id="editBvn" name="bvn" required pattern="[0-9]{11}" title="Please enter a valid 11-digit BVN number.">
                 </div>
-                <!-- Removed selfie upload from edit modal for simplicity, as it's usually a separate process -->
-                <!-- <div class="form-group">
-                    <label for="editSelfie">Upload New Selfie:</label>
-                    <input type="file" id="editSelfie" name="selfie" accept="image/*">
-                </div> -->
 
                 <h4>Guarantor Information</h4>
                 <div class="form-group">
@@ -541,8 +603,8 @@
         </div>
     </div>
 
-    <!-- View Customer Modal -->
-    <div id="viewCustomerModal" class="modal hidden">
+    <!-- View Customer Modal (Updated) -->
+    <div id="viewCustomerModal" class="modal">
         <div class="modal-content card">
             <span class="close-button" id="closeViewCustomerModal">&times;</span>
             <h3>Customer Details</h3>
@@ -563,7 +625,6 @@
                 <p><strong>ID Type:</strong> <span id="viewIdType"></span></p>
                 <p><strong>ID Number:</strong> <span id="viewIdNumber"></span></p>
                 <p><strong>BVN:</strong> <span id="viewBvn"></span></p>
-                <!-- <p><strong>Selfie:</strong> <img id="viewSelfie" src="" alt="Customer Selfie" style="max-width: 100px; max-height: 100px;"></p> -->
             </div>
             <div class="details-section">
                 <h4>Guarantor Information</h4>
@@ -576,7 +637,7 @@
                 <p><strong>Residential Address:</strong> <span id="viewGuarantorResidentialAddress"></span></p>
             </div>
             <div class="form-actions">
-                <button type="button" class="cancel-button" id="closeViewCustomerModal">Close</button>
+                <button type="button" class="cancel-button" id="closeViewCustomerModalBtn">Close</button>
             </div>
         </div>
     </div>

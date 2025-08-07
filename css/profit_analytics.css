@@ -191,19 +191,32 @@ body {
 }
 
 /* Styles for specific filter sections (initially hidden) */
+/* REMOVED: display: flex; from here. Let JS control display. */
 #monthYearSelector,
 #quarterYearSelector,
 #yearOnlySelector,
 #customRangeSelector {
-    display: flex;
+    /* Ensure they are hidden by default, or let the inline style handle it */
+    display: none; /* Explicitly hide them by default */
     gap: 10px;
     align-items: center;
+    flex-wrap: wrap; /* Added for better responsiveness */
 }
+
+/* Individual display settings when shown by JS */
+#monthYearSelector.active,
+#quarterYearSelector.active,
+#yearOnlySelector.active,
+#customRangeSelector.active {
+    display: flex; /* Only apply flex when active class is added by JS */
+}
+
 
 /* ====== Styles for Custom Date Range Picker ====== */
 #customRangeSelector {
-    display: none; /* Initially hidden */
-    flex-direction: row;
+    /* This rule is now redundant for display:none as it's handled above */
+    /* But keeping it here for other specific styles if needed */
+    flex-direction: row; /* Keep for layout when visible */
     gap: 10px;
     align-items: center;
 }
@@ -218,6 +231,15 @@ body {
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 1rem;
+}
+
+/* Add some spacing for the controls */
+#profitAnalysisControls > div {
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #f9f9f9;
 }
 
 /* ====== Styles for Export Options ====== */
