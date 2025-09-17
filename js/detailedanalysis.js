@@ -19,14 +19,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const modalCloseBtn = document.getElementById('modalCloseBtn');
     const logoutBtn = document.getElementById('logout');
 
+    // Get the export buttons
+    const exportPdfBtn = document.getElementById('exportDetailedPdfBtn');
+    const exportXmlBtn = document.getElementById('exportDetailedXmlBtn');
+
     // --- API Configuration ---
-    // NOTE: Replace this with the actual base URL from your config.js file
-    
-    // Fixed: Removed the redundant '/api' from the endpoint path to prevent 404 errors.
     const API_ENDPOINT = `${API_BASE_URL}/Loan/profit-analytics/detailed`;
 
     // --- Event Listeners ---
-    // Toggle filter input fields based on selection
     filterPeriodSelect.addEventListener('change', function() {
         monthYearSelector.style.display = 'none';
         quarterYearSelector.style.display = 'none';
@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Handle "Apply" button clicks for different filters
     document.getElementById('applyMonthYearFilter').addEventListener('click', () => {
         const month = document.getElementById('month').value;
         const year = document.getElementById('year').value;
@@ -89,28 +88,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Export button listeners
     document.getElementById('exportDetailedPdfBtn').addEventListener('click', () => exportData('pdf'));
     document.getElementById('exportDetailedXmlBtn').addEventListener('click', () => exportData('xml'));
 
-    // Logout button listener
     logoutBtn.addEventListener('click', function(event) {
         event.preventDefault();
-        // Clear the token and redirect to the login page
         localStorage.removeItem('token');
         window.location.href = 'index.html';
     });
 
-    // Modal close button
     modalCloseBtn.addEventListener('click', hideCustomMessageModal);
     
     // --- Core Functions ---
-    /**
-     * Fetches analytics data from the API and populates the tables.
-     * @param {Object} periodValues - An object containing the filter values.
-     */
     async function fetchAndRenderAnalytics(periodValues) {
         showLoadingIndicator();
+        
+        // Hide the export buttons while data is loading
+        exportPdfBtn.style.display = 'none';
+        exportXmlBtn.style.display = 'none';
 
         const authToken = localStorage.getItem('token');
         if (!authToken) {
@@ -119,7 +114,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Reverted to including query parameters to fix the 400 Bad Request error.
         const queryParams = new URLSearchParams(periodValues).toString();
         const requestUrl = `${API_ENDPOINT}?${queryParams}`;
 
@@ -128,7 +122,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    // Corrected: Use standard 'Authorization' header with 'Bearer' token.
                     'Authorization': `Bearer ${authToken}`
                 }
             });
@@ -140,17 +133,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const data = await response.json();
             
-            // Log the full data response to the console to see its structure
             console.log("API Response Data:", data);
             
-            // Assuming the API returns a structure with both totals and a breakdown
             const simpleData = data.totals || data;
             const detailedData = data.breakdown || [];
             
             renderSimpleTable(simpleData, data.period);
             renderDetailedTable(detailedData);
             
-            // Show the detailed table only if there is data to display
             if (detailedData.length > 0) {
                 detailedAnalysisSection.style.display = 'block';
             } else {
@@ -165,11 +155,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    /**
-     * Populates the simple profit analysis table.
-     * @param {Object} data - The totals object from the API response.
-     * @param {string} periodText - The period text (e.g., "2025-01-01 to 2025-12-31").
-     */
     function renderSimpleTable(data, periodText) {
         profitAnalysisTableBody.innerHTML = '';
         if (Object.keys(data).length === 0) {
@@ -190,16 +175,20 @@ document.addEventListener('DOMContentLoaded', function() {
         profitAnalysisTableBody.appendChild(row);
     }
 
-    /**
-     * Populates the detailed profit analysis table.
-     * @param {Array<Object>} data - The breakdown array from the API response.
-     */
     function renderDetailedTable(data) {
         detailedAnalysisTableBody.innerHTML = '';
         if (data.length === 0) {
             detailedAnalysisTableBody.innerHTML = '<tr><td colspan="6">No detailed analytics data available for this period.</td></tr>';
+            // Hide the buttons if no data is present
+            exportPdfBtn.style.display = 'none';
+            exportXmlBtn.style.display = 'none';
             return;
         }
+        
+        // Show the buttons if detailed data is available
+        exportPdfBtn.style.display = 'inline-block';
+        exportXmlBtn.style.display = 'inline-block';
+
         data.forEach(item => {
             const row = document.createElement('tr');
             row.innerHTML = `
@@ -233,25 +222,50 @@ document.addEventListener('DOMContentLoaded', function() {
         customMessageModal.style.display = 'none';
     }
     
-    // Placeholder for export logic
     function exportData(format) {
-        showCustomMessageModal("Exporting Data", `This will export the detailed analytics as a ${format.toUpperCase()} file. (Not yet implemented)`);
-    }
+        if (format === 'pdf') {
+            const detailedAnalysisTable = document.getElementById('detailedAnalysisTable');
+            if (!detailedAnalysisTable) {
+                showCustomMessageModal("Export Error", "Detailed analysis table not found.");
+                return;
+            }
 
-    // --- Initial Load ---
-    // Hide the pre-loader animation after a short delay
+            html2canvas(detailedAnalysisTable).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+
+                const imgWidth = 210;
+                const pageHeight = 295;
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                pdf.save('profit-analytics.pdf');
+            }).catch(error => {
+                console.error("Error generating PDF:", error);
+                showCustomMessageModal("Export Error", "Failed to generate PDF. Please try again.");
+            });
+        } else if (format === 'xml') {
+            showCustomMessageModal("Exporting Data", `This will export the detailed analytics as an XML file. (Not yet implemented)`);
+        }
+    }
+    
+    // This section hides the pre-loader but does not fetch data
     const rollingLoader = document.querySelector('.rolling-load');
     if (rollingLoader) {
         setTimeout(() => {
             rollingLoader.style.display = 'none';
         }, 1000);
     }
-    
-    // Initialize the view by fetching data for the current month and year
-    const today = new Date();
-    const currentMonth = String(today.getMonth() + 1).padStart(2, '0');
-    const currentYear = today.getFullYear();
-    document.getElementById('month').value = currentMonth;
-    document.getElementById('year').value = currentYear;
-    fetchAndRenderAnalytics({ month: currentMonth, year: currentYear });
 });

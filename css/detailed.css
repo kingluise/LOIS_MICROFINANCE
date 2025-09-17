@@ -190,6 +190,50 @@ tbody tr:hover {
     transition: background-color 0.2s ease;
 }
 
+#exportDetailedPdfBtn {
+    /* Set the button's background color */
+    background-color: #dc3545; /* A standard red color, often used for PDF icons */
+    
+    /* Set the text color to white for contrast */
+    color: white; 
+    
+    /* Remove the default button border */
+    border: none;
+    
+    /* Add some padding to make the button bigger and more clickable */
+    padding: 10px 20px; 
+    
+    /* Center the text and icon inside the button */
+    text-align: center;
+    
+    /* Remove any underline on the text */
+    text-decoration: none;
+    
+    /* Display as an inline-block element */
+    display: inline-block;
+    
+    /* Set the font size */
+    font-size: 16px;
+    
+    /* Add some margin to separate it from other elements */
+    margin: 4px 2px;
+    
+    /* Change the cursor to a pointer on hover */
+    cursor: pointer;
+    
+    /* Add rounded corners */
+    border-radius: 8px;
+    
+    /* Add a smooth transition for hover effects */
+    transition: background-color 0.3s ease;
+}
+
+/* Style for when the user hovers over the button */
+#exportDetailedPdfBtn:hover {
+    background-color: #c82333; /* A slightly darker red */
+}
+
+
 /* --- Responsive Design --- */
 @media (max-width: 768px) {
     body {
