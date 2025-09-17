@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profit Analytics</title>
-    <link rel="stylesheet" href="css/profit_analytics.css">
-    <script src="js/apiconfig.js" defer></script>
-    <script src="js/profit_analytics.js" defer></script>
+    <link rel="stylesheet" href="css/analysis.css">
+    <link rel="stylesheet" href="css/detailed.css">
+    <script src="js/config.js" defer></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <script src="js/detailedanalysis.js" defer></script>
     <style>
-        /* Rolling Page Load Animation */
+        /* Keep all your existing styles */
         @keyframes rollIn {
             0% {
                 opacity: 0;
@@ -58,9 +61,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Modern Table Styling */
-        /* (Your existing table styling from profit_analytics.css will apply here) */
-
         @keyframes fadeInUp {
             to {
                 transform: translateY(0);
@@ -68,9 +68,8 @@
             }
         }
 
-        /* Basic styling for loading indicator */
         #loadingIndicator {
-            display: none; /* Hidden by default */
+            display: none;
             position: fixed;
             top: 50%;
             left: 50%;
@@ -92,11 +91,11 @@
             animation: spin 1s linear infinite;
             margin: 0 auto 10px auto;
         }
-        /* Style for disabled buttons */
+
         button:disabled {
             cursor: not-allowed;
             opacity: 0.6;
-            background-color: #ccc; /* Or a specific disabled color */
+            background-color: #ccc;
         }
     </style>
 </head>
@@ -110,21 +109,23 @@
 
     <div class="sidebar">
         <div class="logo-title">
-            <img src="images/LOIS.png" alt="Logo" class="logo">
+            <img src="images/loism.png" alt="Logo" class="logo">
             <h2>Lois Microfinance</h2>
         </div>
         <ul class="menu">
-            <li><a href="admin_dashboard.html">🏠 Home</a></li>
-            <li><a href="admin_customer.html">👥 Manage Customers</a></li>
-            <li><a href="admin_loan.html">💰 Manage Loans</a></li>
-            <li><a href="admin_payment.html">💳 Payments</a></li>
-            <li><a href="admin_notification.html">🔔 Notifications</a></li>
-            <li class="active"><a href="admin_profit_analysis.html">📊 Profit Analytics</a></li>
+            <li><a href="dashboard.html">🏠 Home</a></li>
+            <li><a href="customer.html">👥 Manage Customers</a></li>
+            <li><a href="loan.html">💰 Manage Loans</a></li>
+            <li><a href="payment.html">💳 Payments</a></li>
+            <li><a href="notification.html">🔔 Notifications</a></li>
+            <li><a href="users.html">👤 User Management</a></li>
+            <li class="active"><a href="analysis.html">📊 Profit Analytics</a></li>
             <li><a href="index.html" id="logout">🚪 Logout</a></li>
         </ul>
     </div>
 
     <div class="container">
+        <!-- SIMPLE PROFIT ANALYSIS -->
         <div id="profitAnalysis">
             <h2><i class="fas fa-chart-line"></i> Profit Analytics</h2>
 
@@ -137,7 +138,6 @@
                     <option value="custom">Custom Range</option>
                 </select>
 
-                <!-- REMOVED inline style="display: none;" -->
                 <div id="monthYearSelector">
                     <label for="month">Month:</label>
                     <select id="month">
@@ -154,13 +154,11 @@
                         <option value="11">November</option>
                         <option value="12">December</option>
                     </select>
-                    <!-- CORRECTED ID: Changed from 'monthlyYearInput' to 'year' -->
                     <label for="year">Year:</label>
                     <input type="number" id="year" placeholder="YYYY">
                     <button id="applyMonthYearFilter">Apply</button>
                 </div>
 
-                <!-- REMOVED inline style="display: none;" -->
                 <div id="quarterYearSelector">
                     <label for="quarter">Quarter:</label>
                     <select id="quarter">
@@ -174,14 +172,12 @@
                     <button id="applyQuarterYearFilter">Apply</button>
                 </div>
 
-                <!-- REMOVED inline style="display: none;" -->
                 <div id="yearOnlySelector">
                     <label for="onlyYear">Year:</label>
                     <input type="number" id="onlyYear" placeholder="YYYY">
                     <button id="applyYearFilter">Apply</button>
                 </div>
 
-                <!-- REMOVED inline style="display: none;" -->
                 <div id="customRangeSelector">
                     <label for="startDate">Start Date:</label>
                     <input type="date" id="startDate">
@@ -191,40 +187,60 @@
                 </div>
             </div>
 
-            <div class="table-container">
-                <table id="profitAnalysisTable">
-                    <thead>
-                        <tr>
-                            <th>Period</th>
-                            <th>Total Disbursement</th>
-                            <th>Total Repayment</th>
-                            <th>Interest Earned</th>
-                            <th>Overdue Loans</th>
-                            <th>Total Overdue Amount</th>
-                            <th>Profit</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Data will be inserted here by JavaScript -->
-                    </tbody>
-                </table>
-            </div>
+           <!-- SIMPLE PROFIT ANALYSIS TABLE -->
+<div class="table-container">
+    <table id="profitAnalysisTable">
+        <thead>
+            <tr>
+                <th>Period</th>
+                <th>Total Disbursement</th>
+                <th>Total Exp Repayment</th>
+                <th>Expected Interest</th>
+                <th>Overdue Loans</th>
+                <th>Total Overdue Amount</th>
+                <th>Profit Earned</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Simple analytics data goes here -->
+        </tbody>
+    </table>
+</div>
 
-            <div id="exportOptions">
-                <label>Export As:</label>
-                <button id="exportPdfBtn"><i class="fas fa-file-pdf"></i> PDF</button>
-                <button id="exportXmlBtn"><i class="fas fa-file-code"></i> XML</button>
+<!-- DETAILED PROFIT ANALYSIS TABLE -->
+<div id="detailedAnalysis" style="display: none; margin-top: 40px;">
+    <h2><i class="fas fa-list-alt"></i> Detailed Profit Analysis</h2>
+    <div class="table-container">
+        <table id="detailedAnalysisTable">
+            <thead>
+                <tr>
+                    <th>Period</th>
+                    <th>Disbursement</th>
+                    <th>Expected Repayment</th>
+                    <th>Expected Interest</th>
+                    <th>Profit Earned</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Detailed analytics data will be injected here -->
+            </tbody>
+        </table>
+     </div>
+    </div>
+
+            <div id="exportDetailedOptions">
+                <label>Export Detailed As:</label>
+                <button id="exportDetailedPdfBtn"><i class="fas fa-file-pdf"></i> PDF</button>
+                <button id="exportDetailedXmlBtn"><i class="fas fa-file-code"></i> XML</button>
             </div>
         </div>
     </div>
 
-    <!-- Added Loading Indicator -->
-    <div id="loadingIndicator" style="display: none;">
+    <div id="loadingIndicator">
         <div class="spinner"></div>
         <p>Loading data...</p>
     </div>
 
-    <!-- Custom Message Modal (for displayMessageModal function) -->
     <div id="customMessageModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 1001;">
         <h3 id="modalTitle"></h3>
         <p id="modalMessage"></p>
@@ -232,7 +248,6 @@
     </div>
 
     <script>
-        // Add this script to hide the rolling loader when page is loaded
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
                 const rollingLoader = document.querySelector('.rolling-load');

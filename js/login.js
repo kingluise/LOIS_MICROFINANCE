@@ -1,84 +1,63 @@
-// js/login.js
 
-// Ensure API_BASE_URL is defined in js/config.js
-// Example: const API_BASE_URL = 'http://localhost:5279';
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const roleSelect = document.getElementById('role');
+    const messageDiv = document.getElementById('message');
+    const loginButton = document.getElementById('login-button');
 
-    loginForm.addEventListener('submit', async function(event) {
-        event.preventDefault(); // Prevent default form submission
+    if (!loginForm || !messageDiv || !loginButton) {
+        console.error("Required HTML elements not found.");
+        return;
+    }
 
-        const email = emailInput.value;
-        const password = passwordInput.value;
-        const role = roleSelect.value; // Get the selected role from the dropdown
+    // Function to display messages to the user
+    function showMessage(text, isError = false) {
+        messageDiv.textContent = text;
+        messageDiv.style.color = isError ? 'red' : 'green';
+    }
 
-        if (!email || !password || !role) {
-            alert('Please fill in all fields (Email, Password, and Role).');
-            return;
-        }
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
+        // Disable the button and show a loading state
+        loginButton.disabled = true;
+        showMessage('Logging in...');
+
+        const email = loginForm.email.value;
+        const password = loginForm.password.value;
+
+        // Use a simple, non-retryable fetch
         try {
-            const response = await fetch(`${API_BASE_URL}/authentication/login`, {
+            const response = await fetch(`${API_BASE_URL}/Auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    email: email,
-                    password: password,
-                    role: role // Send the role selected by the user
-                })
+                body: JSON.stringify({ email, password })
             });
 
-            const data = await response.json(); // Parse the JSON response from the API
+            const data = await response.json();
 
-            // Check the 'isSuccessful' flag in the response object
-            if (data.isSuccessful) {
-                console.log('Login successful:', data);
+            if (response.ok) {
+                // Login successful
+                showMessage('Login successful! Redirecting...', false);
+                // Save the token to local storage
+                localStorage.setItem('token', data.token);
 
-                const responseObject = data.responseObject;
-
-                if (responseObject && responseObject.jwt) {
-                    // Store the JWT token and refresh token
-                    localStorage.setItem('jwt_token', responseObject.jwt);
-                    localStorage.setItem('jwt_refresh_token', responseObject.jwtRefreshToken);
-                    console.log('JWT Token stored:', responseObject.jwt);
-                    console.log('Refresh Token stored:', responseObject.jwtRefreshToken);
-
-                    // Get the user's role from the API response
-                    const userRoleFromAPI = responseObject.role;
-
-                    // Redirect based on the role received from the API
-                    if (userRoleFromAPI === 'admin') {
-                        window.location.href = 'admin_dashboard.html';
-                    } else if (userRoleFromAPI === 'operator') {
-                        window.location.href = 'operator_dashboard.html';
-                    } else {
-                        // Fallback or error if role from API is unexpected
-                        alert(`Login successful, but unexpected user role: ${userRoleFromAPI}. Redirecting to a default page.`);
-                        window.location.href = 'default_dashboard.html'; // Or some other default page
-                    }
-                } else {
-                    alert('Login successful, but no token or response object found in the server response.');
-                }
-
+                // Redirect the user to the dashboard
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000); // Wait 1 second before redirecting
             } else {
-                // Handle API errors based on 'isSuccessful' being false
-                const errorMessage = data.errors && data.errors.length > 0
-                                   ? data.errors.join(', ')
-                                   : data.message || 'Unknown login error.';
-                console.error('Login failed:', errorMessage);
-                alert(`Login failed: ${errorMessage}`);
+                // Login failed
+                showMessage(`Login failed: ${data.message || 'Invalid credentials'}`, true);
+                console.error("Login failed:", data);
             }
-
         } catch (error) {
-            // Handle network errors (e.g., server not reachable, CORS issues)
-            console.error('Network error during login:', error);
-            alert('An error occurred during login. Please check your network and try again. If the issue persists, contact support.');
+            showMessage('An error occurred. Please try again.', true);
+            console.error("An error occurred during the fetch request:", error);
+        } finally {
+            loginButton.disabled = false;
         }
     });
 });

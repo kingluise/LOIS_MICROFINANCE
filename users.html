@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Management</title> <!-- UPDATED TITLE -->
-    <link rel="stylesheet" href="css/admin_users.css"> <!-- Reusing CSS for general styling -->
-    <script src="js/apiconfig.js" defer></script>
-    <script src="js/admin_users.js" defer></script>
+    <link rel="stylesheet" href="css/users.css"> <!-- Reusing CSS for general styling -->
+    <script src="js/config.js" defer></script>
+    <script src="js/users.js" defer></script>
     <style>
         /* Rolling Page Load Animation */
         @keyframes rollIn {
@@ -19,7 +19,6 @@
                 transform: translateY(0) rotate(0);
             }
         }
-
         .rolling-load {
             position: fixed;
             top: 0;
@@ -35,14 +34,12 @@
             animation: rollOut 0.6s ease-out forwards;
             animation-delay: 0.8s;
         }
-
         @keyframes rollOut {
             to {
                 transform: translateY(-100vh) rotate(-15deg);
                 opacity: 0;
             }
         }
-
         .rolling-load-spinner {
             width: 60px;
             height: 60px;
@@ -52,12 +49,10 @@
             animation: spin 1s linear infinite;
             margin-bottom: 20px;
         }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
         /* Basic styling for loading indicator */
         #loadingIndicator {
             display: none; /* Hidden by default */
@@ -88,6 +83,56 @@
             opacity: 0.6;
             background-color: #ccc; /* Or a specific disabled color */
         }
+        /* Added modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -100,72 +145,76 @@
 
     <div class="sidebar">
         <div class="logo-title">
-            <img src="images/LOIS.png" alt="Logo" class="logo">
+            <img src="images/loism.png" alt="Logo" class="logo">
             <h2>Lois Microfinance</h2>
         </div>
         <ul class="menu">
-            <li><a href="admin_dashboard.html">🏠 Home</a></li>
-            <li><a href="admin_customer.html">👥 Manage Customers</a></li>
-            <li><a href="admin_loan.html">💰 Manage Loans</a></li>
-            <li><a href="admin_payment.html">💳 Payments</a></li>
-            <li><a href="admin_notification.html">🔔 Notifications</a></li>
-            <li><a href="admin_profit_analysis.html">📊 Profit Analytics</a></li>
-            <li class="active"><a href="admin_users.html">👤 User Management</a></li> <!-- NEW LINK, SET ACTIVE -->
+            <li><a href="dashboard.html">🏠 Home</a></li>
+            <li><a href="customer.html">👥 Manage Customers</a></li>
+            <li><a href="loan.html">💰 Manage Loans</a></li>
+            <li><a href="payment.html">💳 Payments</a></li>
+            <li><a href="notification.html">🔔 Notifications</a></li>
+            <li><a href="analysis.html">📊 Profit Analytics</a></li>
+            <li class="active"><a href="users.html">👤 User Management</a></li>
             <li><a href="index.html" id="logout">🚪 Logout</a></li>
         </ul>
     </div>
 
     <div class="container">
-        <div id="userManagementSection"> <!-- UPDATED ID -->
-            <h2><i class="fas fa-users"></i> User Management</h2> <!-- UPDATED HEADING -->
+        <div id="userManagementSection">
+            <h2><i class="fas fa-users"></i> User Management</h2>
 
-            <!-- Content for User Management will go here -->
-            <!-- Example: A table to list users, buttons to add new users, etc. -->
             <div class="user-controls">
-                <button id="addAdminUserBtn">Add Admin User</button>
-                <button id="addOperatorUserBtn">Add Operator User</button>
+                <button id="addUserBtn">Add User</button>
+                <button id="loadCpanelBtn" onclick="window.location.href='https://cpanel.example.com';">Load C-Panel</button>
             </div>
 
-            <h3>Admin Users</h3>
             <div class="table-container">
-                <table id="adminUserTable">
+                <table id="userTable">
                     <thead>
                         <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
+                            <th>Full Name</th>
                             <th>Email</th>
-                            <th>Phone Number</th>
-                            <th>Status</th>
+                            <th>Password</th>
+                            <th>Role</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="adminUserTableBody">
-                        <!-- Admin user data will be inserted here by JavaScript -->
+                    <tbody id="userTableBody">
+                        <!-- User data will be inserted here by JavaScript -->
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
 
-            <h3>Operator Users</h3>
-            <div class="table-container">
-                <table id="operatorUserTable">
-                    <thead>
-                        <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Email</th>
-                            <th>Phone Number</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="operatorUserTableBody">
-                        <!-- Operator user data will be inserted here by JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Add forms or modals for adding/editing users here later -->
-
+    <!-- Modal for Add/Edit User -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3 id="modalTitle">Add User</h3>
+            <form id="userForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="role">Role</label>
+                    <select id="role" name="role" required>
+                        <option value="admin">Admin</option>
+                        <option value="operator">Operator</option>
+                    </select>
+                </div>
+                <button type="submit" id="submitBtn">Submit</button>
+            </form>
         </div>
     </div>
 

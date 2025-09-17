@@ -5,8 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loan Notifications</title>
     <link rel="stylesheet" href="css/notification.css"> <!-- Ensure this CSS exists -->
-    <script src="js/apiconfig.js" defer></script>
+    <script src="js/config.js" defer></script>
+     <!-- jsPDF & AutoTable -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <script src="js/notification.js" defer></script>
+
+   
+
     <style>
         /* Rolling Page Load Animation */
         @keyframes rollIn {
@@ -162,17 +168,17 @@
 
     <div class="sidebar">
         <div class="logo-title">
-            <img src="images/LOIS.png" alt="Logo" class="logo">
+            <img src="images/loism.png" alt="Logo" class="logo">
             <h2>Lois Microfinance</h2>
         </div>
         <ul class="menu">
-            <li><a href="admin_dashboard.html">🏠 Home</a></li>
-            <li><a href="admin_customer.html">👥 Manage Customers</a></li>
-            <li><a href="admin_loan.html">💰 Manage Loans</a></li>
-            <li><a href="admin_payment.html">💳 Payments</a></li>
-            <li class="active"><a href="admin_notification.html">🔔 Notifications</a></li>
-            <li><a href="admin_users.html">👤 User Management</a></li>
-            <li><a href="profit_analytics.html">📊 Profit Analytics</a></li>
+            <li><a href="dashboard.html">🏠 Home</a></li>
+            <li><a href="customer.html">👥 Manage Customers</a></li>
+            <li><a href="loan.html">💰 Manage Loans</a></li>
+            <li><a href="payment.html">💳 Payments</a></li>
+            <li class="active"><a href="notification.html">🔔 Notifications</a></li>
+            <li><a href="users.html">👤 User Management</a></li>
+            <li><a href="analysis.html">📊 Profit Analytics</a></li>
             <li><a href="index.html" id="logout">🚪 Logout</a></li>
         </ul>
     </div>
@@ -220,7 +226,13 @@
                         </tbody>
                     </table>
                 </div>
-                <!-- Pagination can be added here if needed for large results -->
+
+                <!-- Export to PDF Button -->
+                <div class="form-actions" style="margin-top: 15px; text-align: right;">
+                    <button type="button" id="exportPdfButton" class="submit-button">📄 Export to PDF</button>
+                </div>
+
+                <!-- Pagination -->
                 <div id="notificationsPagination" class="pagination-controls"></div>
             </div>
 

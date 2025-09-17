@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment Management</title>
     <link rel="stylesheet" href="css/payment.css">
-    <script src="js/apiconfig.js" defer></script>
-    <script src="js/admin_payment.js" defer></script>
+    <script src="js/config.js" defer></script>
+    <script src="js/payment.js" defer></script>
     <style>
         /* Rolling Page Load Animation */
         @keyframes rollIn {
@@ -103,23 +103,15 @@
             transition: all 0.3s ease;
         }
 
-        th:first-child {
-            border-top-left-radius: 12px;
-        }
-
-        th:last-child {
-            border-top-right-radius: 12px;
-        }
+        th:first-child { border-top-left-radius: 12px; }
+        th:last-child { border-top-right-radius: 12px; }
 
         tbody tr {
             transition: all 0.3s ease;
             position: relative;
         }
 
-        tbody tr:nth-child(even) {
-            background-color: rgba(249, 249, 249, 0.8);
-        }
-
+        tbody tr:nth-child(even) { background-color: rgba(249, 249, 249, 0.8); }
         tbody tr:hover {
             background-color: rgba(252, 163, 17, 0.1);
             transform: translateX(5px);
@@ -135,20 +127,15 @@
         td:before {
             content: "";
             position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
+            left: 0; top: 0; bottom: 0;
             width: 3px;
             background: #FCA311;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
 
-        tbody tr:hover td:before {
-            opacity: 1;
-        }
+        tbody tr:hover td:before { opacity: 1; }
 
-        /* Search bar specific styling for this page */
         .search-bar {
             display: flex;
             gap: 10px;
@@ -189,50 +176,47 @@
             transform: translateY(-1px);
         }
 
-        /* Styling for the Loan IDs list in the table */
         .loan-id-list {
             list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
+            padding: 0; margin: 0;
+            display: flex; flex-wrap: wrap; gap: 5px;
         }
-
         .loan-id-list li {
             background-color: #e9ecef;
             padding: 4px 8px;
             border-radius: 5px;
             font-size: 0.85em;
             color: #343a40;
-            white-space: nowrap; /* Prevent breaking of individual IDs */
+            white-space: nowrap;
         }
+
+        .hidden { display: none; }
+        .action-button { padding: 8px 14px; border-radius: 6px; cursor: pointer; }
+        .approve-btn { background: #28a745; color: #fff; }
+        .reject-btn { background: #dc3545; color: #fff; }
     </style>
 </head>
 <body>
-
-    <!-- Rolling Load Effect -->
     <div class="rolling-load">
         <div class="rolling-load-spinner"></div>
         <p>Loading...</p>
     </div>
 
-    <!-- Custom Alert Container -->
     <div id="customAlertContainer"></div>
 
     <div class="sidebar">
         <div class="logo-title">
-            <img src="images/LOIS.png" alt="Logo" class="logo">
+            <img src="images/loism.png" alt="Logo" class="logo">
             <h2>Lois Microfinance</h2>
         </div>
         <ul class="menu">
-            <li><a href="admin_dashboard.html">🏠 Home</a></li>
-            <li><a href="admin_customer.html">👥 Manage Customers</a></li>
-            <li><a href="admin_loan.html">💰 Manage Loans</a></li>
-            <li class="active"><a href="admin_payment.html">💳 Payments</a></li>
-            <li><a href="admin_notification.html">🔔 Notifications</a></li>
-            <li><a href="admin_users.html">👤 User Management</a></li>
-            <li><a href="profit_analytics.html">📊 Profit Analytics</a></li>
+            <li><a href="dashboard.html">🏠 Home</a></li>
+            <li><a href="customer.html">👥 Manage Customers</a></li>
+            <li><a href="loan.html">💰 Manage Loans</a></li>
+            <li class="active"><a href="payment.html">💳 Payments</a></li>
+            <li><a href="notification.html">🔔 Notifications</a></li>
+            <li><a href="users.html">👤 User Management</a></li>
+            <li><a href="analysis.html">📊 Profit Analytics</a></li>
             <li><a href="index.html" id="logout">🚪 Logout</a></li>
         </ul>
     </div>
@@ -244,35 +228,29 @@
             <div id="paymentButtons" class="button-group">
                 <button id="logPaymentBtn" class="action-button">Log Payment</button>
                 <button id="paymentConfirmationBtn" class="action-button">Payment Confirmation</button>
-                <button id="viewCustomersBtn" class="action-button">Customers</button> <!-- NEW BUTTON -->
+                <button id="paymentTrackerBtn" class="action-button">Payment Tracker</button>
             </div>
 
-            <!-- Log Payment Form Section -->
-            <div id="logPaymentForm" class="hidden form-section card">
+            <!-- Log Payment Form -->
+            <div id="logPaymentForm" class="form-section card hidden">
                 <h3>Log Payment</h3>
                 <form id="paymentForm">
                     <div class="form-group">
                         <label for="loanIdInput">Loan ID:</label>
                         <input type="text" id="loanIdInput" name="loanIdInput" required>
+                        <button type="button" id="fetchLoanBtn" class="action-button">Fetch Loan</button>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group hidden" id="borrowerInfo">
                         <label for="fullName">Full Name:</label>
                         <input type="text" id="fullName" name="fullName" readonly>
-                    </div>
-
-                    <div class="form-group">
                         <label for="loanType">Type of Loan:</label>
                         <input type="text" id="loanType" name="loanType" readonly>
-                    </div>
-
-                    <div class="form-group">
                         <label for="loanAmount">Loan Amount:</label>
                         <input type="number" id="loanAmount" name="loanAmount" readonly>
                     </div>
 
-                    <!-- Payment Plan Display Section -->
-                    <div id="paymentPlanContainer" class="payment-plan-section card">
+                    <div id="paymentPlanContainer" class="payment-plan-section card hidden">
                         <h4>Loan Payment Plan</h4>
                         <table id="paymentPlanTable">
                             <thead>
@@ -283,42 +261,39 @@
                                     <th>Select</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <!-- Payment plan items will be inserted here by JavaScript -->
+                            <tbody id="paymentPlanTableBody">
                                 <tr><td colspan="4" style="text-align: center;">Enter Loan ID to load payment plan.</td></tr>
                             </tbody>
                         </table>
-                        <!-- Hidden input to store the selected paymentPlanId -->
                         <input type="hidden" id="selectedPaymentPlanItemId" name="selectedPaymentPlanItemId">
                     </div>
 
-                    <div class="form-group">
-                        <label for="amountPaid">Amount Paid:</label>
-                        <input type="number" id="amountPaid" name="amountPaid" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="modeOfPayment">Mode of Payment:</label>
-                        <select id="modeOfPayment" name="modeOfPayment" required>
-                            <option value="bankTransfer">Bank Transfer</option>
-                            <option value="cash">Cash</option>
-                            <option value="pos">POS</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="paymentDate">Payment Date:</label>
-                        <input type="date" id="paymentDate" name="paymentDate" required>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="submit" class="submit-button">Submit Payment</button>
-                        <button type="button" id="cancelLogPayment" class="cancel-button">Cancel</button>
+                    <div id="paymentDetails" class="hidden">
+                        <div class="form-group">
+                            <label for="amountPaid">Amount Paid:</label>
+                            <input type="number" id="amountPaid" name="amountPaid" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="modeOfPayment">Mode of Payment:</label>
+                            <select id="modeOfPayment" name="modeOfPayment" required>
+                                <option value="bankTransfer">Bank Transfer</option>
+                                <option value="cash">Cash</option>
+                                <option value="pos">POS</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="paymentDate">Payment Date:</label>
+                            <input type="date" id="paymentDate" name="paymentDate" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="submit-button">Submit Payment</button>
+                            <button type="button" id="cancelLogPayment" class="cancel-button">Cancel</button>
+                        </div>
                     </div>
                 </form>
             </div>
 
-            <!-- Payment Confirmation Table Section -->
+            <!-- Payment Confirmation Table -->
             <div id="confirmationTableContainer" class="hidden table-section card">
                 <h3>Payment Confirmation</h3>
                 <div class="table-container">
@@ -327,15 +302,17 @@
                             <tr>
                                 <th>Payment ID</th>
                                 <th>Loan ID</th>
+                                <th>Repayment Schedule ID</th>
                                 <th>Amount Paid</th>
-                                <th>Date Logged</th>
-                                <th>Logged By</th>
+                                <th>Full Name</th>
                                 <th>Status</th>
+                                <th>Reviewed At</th>
+                                <th>Reviewed By</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody id="confirmationTableBody">
-                            <!-- Pending payments will be inserted here by JavaScript -->
+                            <tr><td colspan="9">No payments to confirm.</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -343,37 +320,37 @@
                 <button id="goBackBtn" class="action-button go-back-button">Go Back</button>
             </div>
 
-            <!-- NEW: Customer Loan Summaries Section -->
-            <div id="customerSummariesSection" class="hidden table-section card">
-                <h3>Customer Loan Summaries</h3>
+            <!-- Payment Tracker Section -->
+            <div id="paymentTrackerContainer" class="hidden table-section card">
+                <h3>Payment Tracker</h3>
                 <div class="search-bar">
-                    <input type="text" id="customerSearchInput" placeholder="Search by customer name...">
-                    <button type="button" id="customerSearchBtn">Search</button>
+                    <input type="text" id="trackerLoanIdInput" placeholder="Enter Loan ID">
+                    <button id="trackerFetchBtn" class="action-button">Search</button>
                 </div>
                 <div class="table-container">
-                    <table id="customerSummariesTable">
+                    <table id="paymentTrackerTable">
                         <thead>
                             <tr>
                                 <th>Full Name</th>
-                                <th>Phone Number</th>
-                                <th>Loan IDs</th>
+                                <th>Loan Amount</th>
+                                <th>Installment ID</th>
+                                <th>Due Date</th>
+                                <th>Amount Due</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody id="customerSummariesTableBody">
-                            <!-- Customer summaries will be inserted here by JavaScript -->
-                            <tr><td colspan="3" style="text-align: center;">Enter a name to search or click search to view all customers.</td></tr>
+                        <tbody id="paymentTrackerTableBody">
+                            <tr><td colspan="6">Enter a Loan ID to view payment history.</td></tr>
                         </tbody>
                     </table>
                 </div>
-                <div id="customerSummariesPagination" class="pagination-controls"></div>
-                <button id="customerSummariesGoBackBtn" class="action-button go-back-button">Go Back</button>
+                <button id="goBackTrackerBtn" class="action-button go-back-button">Go Back</button>
             </div>
-
         </div>
     </div>
 
     <script>
-        // Add this script to hide the rolling loader when page is loaded
+        // Loader hide
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
                 const rollingLoader = document.querySelector('.rolling-load');

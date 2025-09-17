@@ -1,14 +1,14 @@
 /* General Body Styling */
 body {
-    background: linear-gradient(to right, #2c3e50, #27ae60); /* Matches dashboard body background */
+    background: linear-gradient(to right, #2c3e50, #27ae60);
     font-family: Arial, sans-serif;
-    margin: 0; /* Remove default body margin */
-    padding: 0; /* Remove default body padding */
-    min-height: 100vh; /* Ensure body takes full viewport height */
-    display: flex; /* Use flexbox for main layout */
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
 }
 
-/* Sidebar Styling (Copied from dashboard.css) */
+/* Sidebar Styling */
 .sidebar {
     width: 250px;
     height: 100vh;
@@ -19,8 +19,8 @@ body {
     top: 0;
     display: flex;
     flex-direction: column;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.3); /* Add a subtle shadow */
-    z-index: 100; /* Ensure sidebar stays on top */
+    box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+    z-index: 100;
 }
 
 .logo-title {
@@ -44,7 +44,7 @@ body {
     list-style: none;
     padding: 0;
     margin: 0;
-    flex-grow: 1; /* Allow menu to take available space */
+    flex-grow: 1;
 }
 
 .menu li {
@@ -63,25 +63,25 @@ body {
 }
 
 .menu a:hover,
-.menu li.active a { /* Style for active menu item */
+.menu li.active a {
     background: #27ae60;
     color: white;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* Main Content Styling (Copied from dashboard.css) */
+/* Main Content Styling */
 .container {
-    margin-left: 270px; /* Offset for the fixed sidebar */
+    margin-left: 270px;
     padding: 20px;
-    flex-grow: 1; /* Allow container to take remaining width */
+    flex-grow: 1;
 }
 
-/* Hidden class (from dashboard.css) */
+/* Hidden class */
 .hidden {
-    display: none !important; /* Use !important to ensure it overrides other display properties */
+    display: none !important;
 }
 
-/* Rolling Page Load Animation (Existing) */
+/* Rolling Page Load Animation */
 @keyframes rollIn {
     0% {
         opacity: 0;
@@ -131,9 +131,9 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-/* Basic styling for loading indicator (Existing) */
+/* Basic styling for loading indicator */
 #loadingIndicator {
-    display: none; /* Hidden by default */
+    display: none;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -155,16 +155,16 @@ body {
     animation: spin 1s linear infinite;
     margin: 0 auto 10px auto;
 }
-/* Style for disabled buttons (Existing) */
+/* Style for disabled buttons */
 button:disabled {
     cursor: not-allowed;
     opacity: 0.6;
-    background-color: #ccc; /* Or a specific disabled color */
+    background-color: #ccc;
 }
 
-/* Profit Analysis Page Specific Styles (Existing, now also applies to User Management) */
+/* Profit Analysis Page & User Management Sections */
 #profitAnalysis,
-#userManagementSection { /* Apply general section styling to user management too */
+#userManagementSection {
     background: white;
     border-radius: 10px;
     padding: 20px;
@@ -174,7 +174,7 @@ button:disabled {
 
 #profitAnalysisControls {
     display: flex;
-    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+    flex-wrap: wrap;
     gap: 15px;
     margin-bottom: 20px;
     align-items: center;
@@ -195,7 +195,7 @@ button:disabled {
 }
 
 #profitAnalysisControls button {
-    background: #27ae60; /* Use your primary green color */
+    background: #27ae60;
     color: white;
     border: none;
     padding: 10px 15px;
@@ -206,28 +206,25 @@ button:disabled {
 }
 
 #profitAnalysisControls button:hover {
-    background: #1e8449; /* Darker shade for hover */
+    background: #1e8449;
 }
 
-/* Table Styling (Shared) */
+/* ✅ Unified Table Styling */
 #profitAnalysisTable,
-#adminUserTable, /* Apply to user tables */
-#operatorUserTable { /* Apply to user tables */
+#userTable {
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
     background: white;
-    border-radius: 8px;
+    border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 #profitAnalysisTable th,
 #profitAnalysisTable td,
-#adminUserTable th,
-#adminUserTable td, /* Apply to user tables */
-#operatorUserTable th,
-#operatorUserTable td { /* Apply to user tables */
+#userTable th,
+#userTable td {
     border: 1px solid rgba(221, 221, 221, 0.7);
     padding: 12px 15px;
     text-align: left;
@@ -235,43 +232,67 @@ button:disabled {
 }
 
 #profitAnalysisTable th,
-#adminUserTable th, /* Apply to user tables */
-#operatorUserTable th { /* Apply to user tables */
+#userTable th {
     background-color: #14213D;
     color: white;
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: 1rem;
     letter-spacing: 0.5px;
     text-transform: uppercase;
     border-bottom: 2px solid #FCA311;
 }
 
-/* Apply border-radius to specific header cells */
 #profitAnalysisTable th:first-child,
-#adminUserTable th:first-child, /* Apply to user tables */
-#operatorUserTable th:first-child { /* Apply to user tables */
-    border-top-left-radius: 8px;
+#userTable th:first-child {
+    border-top-left-radius: 10px;
 }
-
 #profitAnalysisTable th:last-child,
-#adminUserTable th:last-child, /* Apply to user tables */
-#operatorUserTable th:last-child { /* Apply to user tables */
-    border-top-right-radius: 8px;
+#userTable th:last-child {
+    border-top-right-radius: 10px;
 }
 
 #profitAnalysisTable tr:nth-child(even),
-#adminUserTable tr:nth-child(even), /* Apply to user tables */
-#operatorUserTable tr:nth-child(even) { /* Apply to user tables */
+#userTable tr:nth-child(even) {
     background-color: #f5f5f5;
 }
-
 #profitAnalysisTable tr:hover,
-#adminUserTable tr:hover, /* Apply to user tables */
-#operatorUserTable tr:hover { /* Apply to user tables */
+#userTable tr:hover {
     background-color: #e0e0e0;
 }
 
-/* Styles for specific filter sections (initially hidden) - Existing from previous fix */
+/* Action buttons inside tables */
+#userTable td button,
+#profitAnalysisTable td button {
+    padding: 6px 12px;
+    margin: 0 4px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Edit button */
+#userTable td button.edit {
+    background: #27ae60;
+    color: white;
+}
+#userTable td button.edit:hover {
+    background: #1e8449;
+    transform: translateY(-2px);
+}
+
+/* Delete button */
+#userTable td button.delete {
+    background: #e74c3c;
+    color: white;
+}
+#userTable td button.delete:hover {
+    background: #c0392b;
+    transform: translateY(-2px);
+}
+
+/* Styles for specific filter sections (initially hidden) */
 #monthYearSelector,
 #quarterYearSelector,
 #yearOnlySelector,
@@ -289,7 +310,7 @@ button:disabled {
     display: flex;
 }
 
-/* Styles for Custom Date Range Picker (Existing) */
+/* Styles for Custom Date Range Picker */
 #customRangeSelector {
     flex-direction: row;
     gap: 10px;
@@ -308,7 +329,7 @@ button:disabled {
     font-size: 1rem;
 }
 
-/* Add some spacing for the controls (Existing) */
+/* Add some spacing for the controls */
 #profitAnalysisControls > div {
     margin-top: 15px;
     padding: 10px;
@@ -317,7 +338,7 @@ button:disabled {
     background-color: #f9f9f9;
 }
 
-/* Styles for Export Options (Existing) */
+/* Styles for Export Options */
 #exportOptions {
     margin-top: 20px;
     display: flex;
@@ -348,7 +369,7 @@ button:disabled {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* User Management Specific Styles (NEW ADDITIONS) */
+/* User Management Specific Styles */
 .user-controls {
     display: flex;
     gap: 15px;
@@ -358,7 +379,7 @@ button:disabled {
 }
 
 .user-controls button {
-    background: #27ae60; /* Green for primary actions */
+    background: #27ae60;
     color: white;
     border: none;
     padding: 12px 20px;
@@ -370,7 +391,7 @@ button:disabled {
 }
 
 .user-controls button:hover {
-    background: #1e8449; /* Darker green on hover */
+    background: #1e8449;
     transform: translateY(-2px);
 }
 
@@ -389,8 +410,7 @@ button:disabled {
     margin-bottom: 40px;
 }
 
-#adminUserTable .deactivate-btn,
-#operatorUserTable .deactivate-btn {
+.deactivate-btn {
     background-color: #e74c3c;
     color: white;
     border: none;
@@ -402,13 +422,11 @@ button:disabled {
     transition: background-color 0.3s ease;
 }
 
-#adminUserTable .deactivate-btn:hover,
-#operatorUserTable .deactivate-btn:hover {
+.deactivate-btn:hover {
     background-color: #c0392b;
 }
 
-#adminUserTable .activate-btn,
-#operatorUserTable .activate-btn {
+.activate-btn {
     background-color: #3498db;
     color: white;
     border: none;
@@ -420,13 +438,11 @@ button:disabled {
     transition: background-color 0.3s ease;
 }
 
-#adminUserTable .activate-btn:hover,
-#operatorUserTable .activate-btn:hover {
+.activate-btn:hover {
     background-color: #2980b9;
 }
 
-#adminUserTable .reset-password-btn,
-#operatorUserTable .reset-password-btn {
+.reset-password-btn {
     background-color: #f39c12;
     color: white;
     border: none;
@@ -437,12 +453,11 @@ button:disabled {
     transition: background-color 0.3s ease;
 }
 
-#adminUserTable .reset-password-btn:hover,
-#operatorUserTable .reset-password-btn:hover {
+.reset-password-btn:hover {
     background-color: #e67e22;
 }
 
-/* Responsive adjustments for Profit Analysis (Existing) */
+/* Responsive adjustments for Profit Analysis */
 @media (max-width: 768px) {
     #profitAnalysis {
         width: 90%;
@@ -480,7 +495,7 @@ button:disabled {
         width: calc(100% - 16px);
     }
 
-    /* Responsive adjustments for User Management section (NEW ADDITIONS) */
+    /* Responsive adjustments for User Management section */
     .user-controls {
         flex-direction: column;
         align-items: flex-start;
@@ -491,15 +506,12 @@ button:disabled {
     #userManagementSection h3 {
         font-size: 1.3rem;
     }
-    #adminUserTable th,
-    #adminUserTable td,
-    #operatorUserTable th,
-    #operatorUserTable td {
+    #userTable th,
+    #userTable td {
         padding: 8px 10px;
         font-size: 0.85rem;
     }
-    #adminUserTable td:last-child,
-    #operatorUserTable td:last-child {
+    #userTable td:last-child {
         display: flex;
         flex-direction: column;
         gap: 5px;
@@ -526,19 +538,16 @@ button:disabled {
         width: 100%;
     }
 
-    /* Responsive adjustments for User Management section (NEW ADDITIONS) */
+    /* Responsive adjustments for User Management section */
     #userManagementSection {
         width: 95%;
         padding: 15px;
     }
-    #adminUserTable,
-    #operatorUserTable {
+    #userTable {
         font-size: 12px;
     }
-    #adminUserTable th,
-    #adminUserTable td,
-    #operatorUserTable th,
-    #operatorUserTable td {
+    #userTable th,
+    #userTable td {
         padding: 8px;
     }
 }

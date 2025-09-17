@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loan Management</title>
     <link rel="stylesheet" href="css/loan.css">
-    <script src="js/apiconfig.js" defer></script>
-    <script src="js/admin_loan.js" defer></script>
+    <script src="js/config.js" defer></script>
+    <script src="js/loan.js" defer></script>
     <style>
         /* Rolling Page Load Animation */
         @keyframes rollIn {
@@ -175,26 +175,26 @@
     </style>
 </head>
 <body>
-    <!-- Rolling Load Effect -->
     <div class="rolling-load">
         <div class="rolling-load-spinner"></div>
         <p>Loading...</p>
     </div>
 
-    <!-- Custom Alert Container -->
     <div id="customAlertContainer"></div>
 
     <div class="sidebar">
         <div class="logo-title">
-            <img src="images/LOIS.png" alt="Logo" class="logo">
+            <img src="images/loism.png" alt="Logo" class="logo">
             <h2>Lois Microfinance</h2>
         </div>
         <ul class="menu">
-            <li><a href="operator_dashboard.html">🏠 Home</a></li>
-            <li><a href="operator_customer.html">👥 Manage Customers</a></li>
-            <li class="active"><a href="operator_loan.html">💰 Manage Loans</a></li>
-            <li><a href="operator_payment.html">💳 Payments</a></li>
-            <li><a href="operator_notification.html">🔔 Notifications</a></li>
+            <li><a href="dashboard.html">🏠 Home</a></li>
+            <li><a href="customer.html">👥 Manage Customers</a></li>
+            <li class="active"><a href="loan.html">💰 Manage Loans</a></li>
+            <li><a href="payment.html">💳 Payments</a></li>
+            <li><a href="notification.html">🔔 Notifications</a></li>
+            <li><a href="users.html">👤 User Management</a></li>
+            <li><a href="analysis.html">📊 Profit Analytics</a></li>
             <li><a href="index.html" id="logout">🚪 Logout</a></li>
         </ul>
     </div>
@@ -207,65 +207,65 @@
                 <button id="addLoanBtn" class="action-button">Add Loan</button>
                 <button id="manageLoansBtn" class="action-button">Manage Loans</button>
                 <button id="approveLoansBtn" class="action-button">Approve Loans</button>
-                <button id="viewLoanByCustomerBtn" class="action-button">View Loan By Customer</button>
             </div>
 
-            <!-- Due Repayments Query Section -->
-            <div id="duePaymentsSection" class="form-section card">
-                <h3>Query Due Repayments</h3>
-                <form id="queryDuePaymentsForm">
-                    <div class="form-group">
-                        <label for="fromDate">From Date:</label>
-                        <input type="date" id="fromDate" name="fromDate" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="toDate">To Date:</label>
-                        <input type="date" id="toDate" name="toDate" required>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" id="queryPaymentsButton" class="submit-button">Query Payments</button>
-                        <button type="button" id="clearQueryButton" class="cancel-button">Clear</button>
-                    </div>
-                </form>
-
-                <div id="queriedPaymentsContainer" class="hidden">
-                    <div class="table-container">
-                        <h4>Repayments Due in Range</h4>
-                        <table id="queriedPaymentsTable">
-                            <thead>
-                                <tr>
-                                    <th>Loan ID</th>
-                                    <th>Customer Name</th>
-                                    <th>Amount Due</th>
-                                    <th>Due Date</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="queriedPaymentsTableBody">
-                                <!-- Queried due payments will be inserted here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Add Loan Form Section -->
             <div id="addLoanForm" class="hidden form-section card">
                 <h3>Apply for Loan</h3>
                 <form id="loanApplicationForm">
-                    <!-- Form fields remain unchanged -->
+                    <div class="form-group">
+                        <label for="customerId">Customer ID</label>
+                        <input type="text" id="customerId" name="customerId" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="loanAmount">Loan Amount</label>
+                        <input type="number" id="loanAmount" name="loanAmount" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="interestRate">Interest Rate (%)</label>
+                        <input type="number" id="interestRate" name="interestRate" value="26.6" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loanTerm">Loan Term</label>
+                        <select id="loanTerm" name="loanTerm" required>
+                            <option value="">Select Term</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="duration">Duration</label>
+                        <input type="number" id="duration" name="duration" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loanPurpose">Loan Purpose</label>
+                        <textarea id="loanPurpose" name="loanPurpose" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="action-button">Submit Application</button>
                 </form>
             </div>
 
-            <!-- Manage Loans Table Section -->
             <div id="manageLoansTableContainer" class="hidden">
                 <div class="table-container">
                     <h3>Manage Loans</h3>
+                    <div>
+                        <label for="manageLoanFilter">Filter by Status:</label>
+                        <select id="manageLoanFilter">
+                            <option value="all">All</option>
+                            <option value="approved">Approved</option>
+                            <option value="declined">Declined</option>
+                            <option value="completed">Completed</option>
+                            <option value="defaulted">Defaulted</option>
+                        </select>
+                    </div>
                     <table id="manageLoansTable">
                         <thead>
                             <tr>
                                 <th>Loan ID</th>
-                                <th>Customer ID</th>
+                                <th>Customer Name</th>
                                 <th>Amount</th>
                                 <th>Type</th>
                                 <th>Status</th>
@@ -273,15 +273,13 @@
                             </tr>
                         </thead>
                         <tbody id="manageLoansTableBody">
-                            <!-- Loan data will be inserted here -->
-                        </tbody>
+                            </tbody>
                     </table>
                     <div id="manageLoansPagination" class="pagination-controls"></div>
                     <button id="manageLoansGoBackBtn" class="action-button go-back-button">Go Back</button>
                 </div>
             </div>
 
-            <!-- Approve Loans Table Section -->
             <div id="approveLoansTableContainer" class="hidden">
                 <div class="table-container">
                     <h3>Approve Loans</h3>
@@ -289,7 +287,7 @@
                         <thead>
                             <tr>
                                 <th>Loan ID</th>
-                                <th>Customer ID</th>
+                                <th>Customer Name</th>
                                 <th>Amount</th>
                                 <th>Type</th>
                                 <th>Status</th>
@@ -297,8 +295,7 @@
                             </tr>
                         </thead>
                         <tbody id="approveLoansTableBody">
-                            <!-- Loans pending approval -->
-                        </tbody>
+                            </tbody>
                     </table>
                     <div id="approveLoansPagination" class="pagination-controls"></div>
                     <button id="approveLoansGoBackBtn" class="action-button go-back-button">Go Back</button>
@@ -307,28 +304,21 @@
         </div>
     </div>
 
-    <!-- Loan Details Modal -->
     <div id="loanDetailsModal" class="modal hidden">
         <div class="modal-content">
-            <!-- Modal content remains unchanged -->
-        </div>
+            </div>
     </div>
 
-    <!-- Success Message Modal -->
     <div id="successMessageModal" class="modal hidden">
         <div class="modal-content">
-            <!-- Modal content remains unchanged -->
-        </div>
+            </div>
     </div>
 
     <script>
-        // Add this script to hide the rolling loader when page is loaded
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
                 const rollingLoader = document.querySelector('.rolling-load');
-                if (rollingLoader) {
-                    rollingLoader.style.display = 'none';
-                }
+                if (rollingLoader) rollingLoader.style.display = 'none';
             }, 1000);
         });
     </script>
