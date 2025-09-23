@@ -456,6 +456,11 @@ button:disabled {
 .reset-password-btn:hover {
     background-color: #e67e22;
 }
+/* Remove underline & blue color from all links */
+a {
+  text-decoration: none;
+  color: inherit; /* takes the color from the parent element */
+}
 
 /* Responsive adjustments for Profit Analysis */
 @media (max-width: 768px) {
